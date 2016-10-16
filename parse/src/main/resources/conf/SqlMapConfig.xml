@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+	<!-- Configure a built-in transaction manager. If you're using an app server, 
+		you probably want to use its transaction manager and a managed datasource -->
+	<!-- <properties resource="com/mydomain/SqlMap.properties"/> -->
+	<!-- <transactionManager type="JDBC" commitRequired="false"> <dataSource 
+		type="SIMPLE"> <property name="JDBC.Driver" value="${driver}"/> <property 
+		name="JDBC.ConnectionURL" value="${url}"/> <property name="JDBC.Username" 
+		value="${username}"/> <property name="JDBC.Password" value="${password}"/> 
+		</dataSource> </transactionManager> -->
+
+
+	<!-- List the SQL Map XML files. They can be loaded from the classpath, 
+		as they are here (com.domain.data...) -->
+	<sqlMap resource="conf/Match.xml" />
+	<sqlMap resource="conf/EuropeOdds.xml" />
+	<sqlMap resource="conf/AsiaOdds.xml" />
+	<sqlMap resource="conf/EuropeOddsChange.xml" />
+	<sqlMap resource="conf/AsiaOddsChange.xml" />
+	<sqlMap resource="conf/ExchangeAllAverage.xml" />
+    <sqlMap resource="conf/ExchangeBfListing.xml" />
+    <sqlMap resource="conf/ExchangeBfTurnoverDetail.xml" />
+    <sqlMap resource="conf/ExchangeTransactionProp.xml" />
+    <sqlMap resource="conf/WeightRule.xml" />
+    <sqlMap resource="conf/KellyRule.xml" />
+    <sqlMap resource="conf/Corp.xml" />
+    <sqlMap resource="conf/KellyCorpResult.xml" />
+    <sqlMap resource="conf/KellyCorpCount.xml" />
+    <sqlMap resource="conf/MatchJob.xml" />
+    <sqlMap resource="conf/KellyMatchCount.xml" />
+    <sqlMap resource="conf/LeaguePoints.xml" />
+    <sqlMap resource="conf/MatchStats.xml" />
+    <sqlMap resource="conf/ScoreOdds.xml" />
+    <sqlMap resource="conf/Config.xml" />
+    <sqlMap resource="conf/MatchSkip.xml" />
+    <sqlMap resource="conf/EuropeOddsChangeAll.xml" />
+    <sqlMap resource="conf/AsiaOddsTrends.xml" />
+    <sqlMap resource="conf/IndexStats.xml" />
+    <sqlMap resource="conf/EuroOddsHandicap.xml" />
+    <sqlMap resource="conf/EuroTransAsia.xml" />
+    <sqlMap resource="conf/EuroAsiaRefer.xml" />
+    <sqlMap resource="conf/EuropeOddsChangeDaily.xml" />
+    <sqlMap resource="conf/ProbAverage.xml" />
+    <sqlMap resource="conf/EuropeChangeDailyStats.xml" />
+    <sqlMap resource="conf/AsiaOddsChangeDaily.xml" />
+    
+</sqlMapConfig>

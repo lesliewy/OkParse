@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TransactionProp">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="TransactionProp" type="com.wy.okooo.domain.ExchangeTransactionProp" />
+	<typeAlias alias="Match" type="com.wy.okooo.domain.Match" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="TransactionPropResult" class="TransactionProp">
+		<result property="id" column="ID" />
+		<result property="hostBf" column="HOST_BF" />
+		<result property="evenBf" column="EVEN_BF" />
+		<result property="visitingBf" column="VISITING_BF" />
+		<result property="hostComp" column="HOST_COMP" />
+        <result property="evenComp" column="EVEN_COMP" />
+        <result property="visitingComp" column="VISITING_COMP" />
+        <result property="hostBjSingle" column="HOST_BJ_SINGLE" />
+        <result property="evenBjSingle" column="EVEN_BJ_SINGLE" />
+        <result property="visitingBjSingle" column="VISITING_BJ_SINGLE" />
+        <result property="hostBfProlossIndex" column="HOST_BF_PROLOSS_INDEX" />
+        <result property="evenBfProlossIndex" column="EVEN_BF_PROLOSS_INDEX" />
+        <result property="visitingBfProlossIndex" column="VISITING_BF_PROLOSS_INDEX" />
+        <result property="hostCompProlossIndex" column="HOST_COMP_PROLOSS_INDEX" />
+        <result property="evenCompProlossIndex" column="EVEN_COMP_PROLOSS_INDEX" />
+        <result property="visitingCompProlossIndex" column="VISITING_COMP_PROLOSS_INDEX" />
+        <result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertTransactionProp" parameterClass="TransactionProp">
+		insert into
+		LOT_TRANS_PROP (
+		ID,
+		HOST_BF,
+		EVEN_BF,
+		VISITING_BF,
+		HOST_COMP,
+		EVEN_COMP,
+		VISITING_COMP,
+		HOST_BJ_SINGLE,
+		EVEN_BJ_SINGLE,
+		VISITING_BJ_SINGLE,
+		HOST_BF_PROLOSS_INDEX,
+		EVEN_BF_PROLOSS_INDEX,
+		VISITING_BF_PROLOSS_INDEX,
+		HOST_COMP_PROLOSS_INDEX,
+		EVEN_COMP_PROLOSS_INDEX,
+		VISITING_COMP_PROLOSS_INDEX,
+		TIMESTAMP)
+		values (
+		#id#, #hostBf#,
+		#evenBf#,#visitingBf#,#hostComp#,#evenComp#,#visitingComp#,
+		#hostBjSingle#,#evenBjSingle#,#visitingBjSingle#,#hostBfProlossIndex#,#evenBfProlossIndex#,#visitingBfProlossIndex#,#hostCompProlossIndex#,
+		#evenCompProlossIndex#,#visitingCompProlossIndex#, #timestamp#
+		)
+	</insert>
+	<delete id="deleteTransactionProp" parameterClass="java.lang.Long">
+		delete from LOT_TRANS_PROP where id = #id#
+	</delete>
+	
+    <select id="queryTransPropByTime" parameterClass="Match"
+        resultMap="TransactionPropResult">
+        select b.ID, b.HOST_BF, b.EVEN_BF, b.VISITING_BF, b.HOST_COMP,
+        b.EVEN_COMP,
+        b.VISITING_COMP,
+        b.HOST_BJ_SINGLE,
+        b.EVEN_BJ_SINGLE,
+        b.VISITING_BJ_SINGLE,
+        b.HOST_BF_PROLOSS_INDEX,
+        b.EVEN_BF_PROLOSS_INDEX,
+        b.VISITING_BF_PROLOSS_INDEX,
+        b.HOST_COMP_PROLOSS_INDEX,
+        b.EVEN_COMP_PROLOSS_INDEX,
+        b.VISITING_COMP_PROLOSS_INDEX, b.TIMESTAMP
+        from LOT_MATCH a, LOT_TRANS_PROP b
+        where a.OK_MATCH_ID = b.ID 
+              and a.MATCH_TIME BETWEEN #beginTime# AND #endTime#
+    </select>
+
+</sqlMap>

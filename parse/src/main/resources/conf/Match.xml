@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Match">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="Match" type="com.wy.okooo.domain.Match" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="MatchResult" class="Match">
+		<result property="id" column="ID" />
+		<result property="okMatchId" column="OK_MATCH_ID" />
+		<result property="matchName" column="MATCH_NAME" />
+		<result property="matchSeq" column="MATCH_SEQ" />
+		<result property="matchTime" column="MATCH_TIME" />
+		<result property="closeTime" column="CLOSE_TIME" />
+		<result property="hostTeamName" column="HOST_TEAM_NAME" />
+		<result property="visitingTeamName" column="VISITING_TEAM_NAME" />
+		<result property="hostGoals" column="HOST_GOALS" />
+		<result property="visitingGoals" column="VISITING_GOALS" />
+		<result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+	
+    <resultMap id="OkUrlDateResult" class="Match">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+    </resultMap>
+
+	<insert id="insertMatch" parameterClass="Match">
+		insert into LOT_MATCH (
+		OK_MATCH_ID,
+		MATCH_NAME,
+		MATCH_SEQ,
+		MATCH_TIME,
+		CLOSE_TIME,
+		HOST_TEAM_NAME,
+		VISITING_TEAM_NAME,
+		HOST_GOALS,
+		VISITING_GOALS,
+		OK_URL_DATE,
+		TIMESTAMP)
+		values (
+		#okMatchId#, #matchName#, #matchSeq#,
+		#matchTime#,
+		#closeTime#,#hostTeamName#,#visitingTeamName#,#hostGoals#,
+		#visitingGoals#, #okUrlDate#, #timestamp#
+		)
+	</insert>
+	<delete id="deleteMatch" parameterClass="java.lang.Long">
+		delete from LOT_MATCH
+		where id = #id#
+	</delete>
+
+	<select id="queryMatchesByIdRange" parameterClass="java.lang.Integer"
+		resultMap="MatchResult">
+		select ID,OK_MATCH_ID, MATCH_NAME, MATCH_SEQ, MATCH_TIME,
+		CLOSE_TIME, HOST_TEAM_NAME,
+		VISITING_TEAM_NAME,HOST_GOALS,VISITING_GOALS, OK_URL_DATE, TIMESTAMP
+		from LOT_MATCH
+		where id > (select max(id) - #numOfMatch# from LOT_MATCH)
+	</select>
+
+	<select id="queryExistedMatchesByTime" parameterClass="Match"
+		resultMap="MatchResult">
+		select ID,OK_MATCH_ID, MATCH_NAME, MATCH_SEQ, MATCH_TIME, CLOSE_TIME,
+		HOST_TEAM_NAME,
+		VISITING_TEAM_NAME,HOST_GOALS,VISITING_GOALS, OK_URL_DATE,TIMESTAMP
+		from LOT_MATCH
+		where MATCH_TIME BETWEEN #beginTime# AND #endTime#
+	</select>
+	
+    <select id="queryMatchesByHostTeamName" parameterClass="java.lang.String"
+        resultMap="MatchResult">
+        select ID,OK_MATCH_ID, MATCH_NAME, MATCH_SEQ, MATCH_TIME, CLOSE_TIME,
+        HOST_TEAM_NAME,
+        VISITING_TEAM_NAME,HOST_GOALS,VISITING_GOALS, OK_URL_DATE,TIMESTAMP
+        from LOT_MATCH
+        where HOST_TEAM_NAME = #hostTeamName#
+              order by MATCH_TIME DESC limit 4;
+    </select>
+    
+    <select id="queryMatchesByVisitingTeamName" parameterClass="java.lang.String"
+        resultMap="MatchResult">
+        select ID,OK_MATCH_ID, MATCH_NAME, MATCH_SEQ, MATCH_TIME, CLOSE_TIME,
+        HOST_TEAM_NAME,
+        VISITING_TEAM_NAME,HOST_GOALS,VISITING_GOALS, OK_URL_DATE,TIMESTAMP
+        from LOT_MATCH
+        where VISITING_TEAM_NAME = #visitingTeamName#
+              order by MATCH_TIME DESC limit 4;
+    </select>
+    
+    <select id="queryOkUrlDateFromMatch" parameterClass="java.lang.String"
+        resultMap="OkUrlDateResult">
+        select distinct OK_URL_DATE FROM LOT_MATCH WHERE OK_URL_DATE >= #okUrlDate#
+    </select>
+    
+    <select id="queryMatchRangeByMatchTeamName" parameterClass="Match"
+        resultMap="MatchResult">
+        select ID,OK_MATCH_ID, MATCH_NAME, MATCH_SEQ, MATCH_TIME, CLOSE_TIME,
+        HOST_TEAM_NAME,
+        VISITING_TEAM_NAME,HOST_GOALS,VISITING_GOALS, OK_URL_DATE,TIMESTAMP
+        from LOT_MATCH
+        WHERE MATCH_NAME=#matchName# 
+              and (HOST_TEAM_NAME=#teamName# OR VISITING_TEAM_NAME=#teamName#)
+              order by MATCH_TIME DESC limit #limitedNum#;
+    </select>
+</sqlMap>

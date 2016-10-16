@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EuroAsiaRefer">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="EuroAsiaRefer" type="com.wy.okooo.domain.EuroAsiaRefer" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="EuroAsiaReferResult" class="EuroAsiaRefer">
+	    <result property="oddsEuro" column="ODDS_EURO" />
+	    <result property="oddsAsiaTop" column="ODDS_ASIA_TOP" />
+	    <result property="handicapAsia" column="HANDICAP_ASIA" />
+		<result property="oddsAsiaUnder" column="ODDS_ASIA_UNDER" />
+		<result property="totalDiscount" column="TOTAL_DISCOUNT" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertEuroAsiaRefer" parameterClass="EuroAsiaRefer">
+		insert into LOT_EURO_ASIA_REFER (
+		ODDS_EURO,
+		ODDS_ASIA_TOP,
+		HANDICAP_ASIA,
+		ODDS_ASIA_UNDER,
+		TOTAL_DISCOUNT,
+		TIMESTAMP)
+		values (
+		#oddsEuro#, #oddsAsiaTop#, #handicapAsia#, #oddsAsiaUnder#, #totalDiscount#, #timestamp#)
+	</insert>
+	
+    <select id="queryAllEuroAsiaRefer" resultMap="EuroAsiaReferResult">
+        select *
+        from LOT_EURO_ASIA_REFER
+    </select>
+	
+</sqlMap>

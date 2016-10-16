@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KellyCorpResult">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="KellyCorpResult" type="com.wy.okooo.domain.KellyCorpResult" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="KellyCorpResult" class="KellyCorpResult">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="matchName" column="MATCH_NAME" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="count" column="COUNT" />
+		<result property="winCount" column="WIN_COUNT" />
+		<result property="evenCount" column="EVEN_COUNT" />
+		<result property="negaCount" column="NEGA_COUNT" />
+		<result property="allSeq" column="ALL_SEQ" />
+		<result property="winSeq" column="WIN_SEQ" />
+		<result property="evenSeq" column="EVEN_SEQ" />
+		<result property="negaSeq" column="NEGA_SEQ" />
+		<result property="winProb" column="WIN_PROB" />
+		<result property="evenProb" column="EVEN_PROB" />
+		<result property="negaProb" column="NEGA_PROB" />
+		<result property="timestamp" column="TIMESTAMP" />
+		<result property="ruleType" column="RULE_TYPE" />
+	</resultMap>
+	
+    <resultMap id="KellyCorpResultCorpName" class="KellyCorpResult">
+        <result property="oddsCorpName" column="ODDS_CORP_NAME" />
+    </resultMap>
+    
+    <resultMap id="KellyCorpResultMatchName" class="KellyCorpResult">
+        <result property="matchName" column="MATCH_NAME" />
+    </resultMap>
+
+    <resultMap id="HighKellyPredictMap" class="java.util.HashMap">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+        <result property="matchName" column="MATCH_NAME" />
+        <result property="oddsCorpName" column="ODDS_CORP_NAME" />
+        <result property="count" column="COUNT" />
+        <result property="winCount" column="WIN_COUNT" />
+        <result property="allSeq" column="ALL_SEQ" />
+        <result property="winSeq" column="WIN_SEQ" />
+        <result property="evenSeq" column="EVEN_SEQ" />
+        <result property="negaSeq" column="NEGA_SEQ" />
+        <result property="allWinCount" column="ALL_WIN_COUNT" />
+        <result property="allCount" column="ALL_COUNT" />
+        <result property="euroTimeBeforeMatch" column="EURO_TIME_BEFORE_MATCH" />
+    </resultMap>
+
+    <resultMap id="HighKellyPredictMapFor2" class="java.util.HashMap">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+        <result property="matchName" column="MATCH_NAME" />
+        <result property="oddsCorpName" column="ODDS_CORP_NAME" />
+        <result property="allSeq" column="ALL_SEQ" />
+        <result property="winSeq" column="WIN_SEQ" />
+        <result property="evenSeq" column="EVEN_SEQ" />
+        <result property="processedCount" column="PROCESSED_COUNT" />
+        <result property="allCount" column="ALL_COUNT" />
+    </resultMap>
+    
+    <resultMap id="okUrlDateKellyCOrpResult" class="KellyCorpResult">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+    </resultMap>
+    
+	<insert id="insert" parameterClass="KellyCorpResult">
+		insert into LOT_KELLY_CORP_RESULT (
+		OK_URL_DATE,
+		MATCH_NAME,
+		ODDS_CORP_NAME,
+		COUNT,
+		WIN_COUNT,
+		EVEN_COUNT,
+		NEGA_COUNT,
+		ALL_SEQ,
+		WIN_SEQ,
+		EVEN_SEQ,
+		NEGA_SEQ,
+		WIN_PROB,
+		EVEN_PROB,
+		NEGA_PROB,
+		TIMESTAMP,
+		RULE_TYPE)
+		values (
+		#okUrlDate#, #matchName#, #oddsCorpName#,
+		#count#, #winCount#,#evenCount#,#negaCount#,#allSeq#,
+		#winSeq#, #evenSeq#, #negaSeq#, #winProb#, #evenProb#, #negaProb#, #timestamp#, #ruleType#
+		)
+	</insert>
+	
+    <delete id="deleteKellyResult" parameterClass="KellyCorpResult">
+        delete from LOT_KELLY_CORP_RESULT
+        where OK_URL_DATE = #okUrlDate# and RULE_TYPE= #ruleType#
+    </delete>
+    
+    <!-- resultClass 而不是 resultType, mybatis3才是 resultType -->
+    <select id="queryCountCorpsByMatchName" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+        select count(distinct ODDS_CORP_NAME) count from LOT_KELLY_CORP_RESULT where MATCH_NAME=#matchName#
+    </select>
+    
+    <select id="queryResultByKey" parameterClass="KellyCorpResult" resultMap="KellyCorpResult">
+        select OK_URL_DATE, MATCH_NAME, ODDS_CORP_NAME, COUNT, WIN_COUNT, EVEN_COUNT, NEGA_COUNT, ALL_SEQ, WIN_SEQ, EVEN_SEQ,
+               NEGA_SEQ, WIN_PROB, EVEN_PROB, NEGA_PROB, TIMESTAMP, RULE_TYPE
+          from LOT_KELLY_CORP_RESULT
+         where OK_URL_DATE=#okUrlDate# and MATCH_NAME=#matchName# and RULE_TYPE in('K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8');
+    </select>
+
+    <select id="queryResultByMatchName" parameterClass="java.lang.String" resultMap="KellyCorpResult">
+        select OK_URL_DATE, MATCH_NAME, ODDS_CORP_NAME, COUNT, WIN_COUNT, EVEN_COUNT, NEGA_COUNT, ALL_SEQ, WIN_SEQ, EVEN_SEQ,
+               NEGA_SEQ, WIN_PROB, EVEN_PROB, NEGA_PROB, TIMESTAMP, RULE_TYPE
+          from LOT_KELLY_CORP_RESULT
+         where MATCH_NAME=#matchName#
+    </select>
+    
+    <select id="queryResultByMatchNameExclusive" parameterClass="KellyCorpResult" resultMap="KellyCorpResult">
+        select OK_URL_DATE, MATCH_NAME, ODDS_CORP_NAME, COUNT, WIN_COUNT, EVEN_COUNT, NEGA_COUNT, ALL_SEQ, WIN_SEQ, EVEN_SEQ,
+               NEGA_SEQ, WIN_PROB, EVEN_PROB, NEGA_PROB, TIMESTAMP, RULE_TYPE
+          from LOT_KELLY_CORP_RESULT
+          <!-- 
+          where MATCH_NAME=#matchName# and OK_URL_DATE like '1409%'
+           -->
+         where MATCH_NAME=#matchName#
+               AND OK_URL_DATE != #okUrlDate#
+    </select>
+
+    <select id="queryAllCorpName" resultMap="KellyCorpResultCorpName">
+        select distinct ODDS_CORP_NAME
+          from LOT_KELLY_CORP_RESULT
+    </select>
+    
+    <select id="queryAllMatchName" resultMap="KellyCorpResultMatchName">
+        select distinct MATCH_NAME
+          from LOT_KELLY_CORP_RESULT
+    </select>
+    
+    <select id="queryAllMatchNameByOkUrlDate" parameterClass="java.lang.String" resultMap="KellyCorpResultMatchName">
+        select distinct MATCH_NAME
+          from LOT_KELLY_CORP_RESULT where OK_URL_DATE=#okUrlDate#
+    </select>
+    
+    <select id="highK3Predict" parameterClass="java.lang.String" resultMap="HighKellyPredictMap">
+        select a.OK_URL_DATE, a.MATCH_NAME, a.ODDS_CORP_NAME, a.COUNT, a.WIN_COUNT, a.ALL_SEQ, a.WIN_SEQ, a.EVEN_SEQ, a.NEGA_SEQ,
+         b.WIN_COUNT ALL_WIN_COUNT, b.ALL_COUNT, c.EURO_TIME_BEFORE_MATCH
+          from LOT_KELLY_CORP_RESULT a, 
+               (select a.MATCH_NAME, a.ODDS_CORP_NAME, count(*) WIN_COUNT, b.ALL_COUNT, count(*)/b.ALL_COUNT PROB 
+                  from LOT_KELLY_CORP_RESULT a, 
+                       (select MATCH_NAME, ODDS_CORP_NAME, RULE_TYPE, count(*) ALL_COUNT 
+                          from LOT_KELLY_CORP_RESULT
+                         where RULE_TYPE = 'K3' 
+                               and OK_URL_DATE &lt; #okUrlDate# group by MATCH_NAME,ODDS_CORP_NAME) b
+                 where a.MATCH_NAME=b.MATCH_NAME 
+                       and a.ODDS_CORP_NAME=b.ODDS_CORP_NAME 
+                       and a.RULE_TYPE=b.RULE_TYPE 
+                       and a.OK_URL_DATE &lt; #okUrlDate# 
+                       and a.WIN_PROB > 0.99 
+                       group by a.MATCH_NAME, a.ODDS_CORP_NAME having count(*)/b.ALL_COUNT &gt; 0.8 and count(*) &gt; 1 
+                       order by MATCH_NAME,  PROB) b, 
+                LOT_CORP c 
+          where a.MATCH_NAME=b.MATCH_NAME 
+                and a.ODDS_CORP_NAME=b.ODDS_CORP_NAME 
+                and a. ODDS_CORP_NAME=c.CORP_NAME 
+                and a.RULE_TYPE = 'K3'
+                and a.OK_URL_DATE=#okUrlDate#
+    </select>
+
+    <select id="highK4Predict" parameterClass="java.lang.String" resultMap="HighKellyPredictMap">
+        select a.OK_URL_DATE, a.MATCH_NAME, a.ODDS_CORP_NAME, a.COUNT, a.WIN_COUNT, a.ALL_SEQ, a.WIN_SEQ, a.EVEN_SEQ, a.NEGA_SEQ,
+         b.WIN_COUNT ALL_WIN_COUNT, b.ALL_COUNT, c.EURO_TIME_BEFORE_MATCH 
+          from LOT_KELLY_CORP_RESULT a, 
+               (select a.MATCH_NAME, a.ODDS_CORP_NAME, count(*) WIN_COUNT, b.ALL_COUNT, count(*)/b.ALL_COUNT PROB 
+                  from LOT_KELLY_CORP_RESULT a, 
+                       (select MATCH_NAME, ODDS_CORP_NAME, RULE_TYPE, count(*) ALL_COUNT 
+                          from LOT_KELLY_CORP_RESULT 
+                         where RULE_TYPE='K4' 
+                               and OK_URL_DATE &lt; #okUrlDate# group by MATCH_NAME, ODDS_CORP_NAME) b
+                 where a.MATCH_NAME=b.MATCH_NAME 
+                       and a.ODDS_CORP_NAME = b.ODDS_CORP_NAME
+                       and a.RULE_TYPE = b.RULE_TYPE 
+                       and a.OK_URL_DATE &lt; #okUrlDate#
+                       and a.NEGA_PROB > 0.8
+                       group by a.MATCH_NAME, a.ODDS_CORP_NAME having count(*)/b.ALL_COUNT &gt; 0.8 and count(*) &gt; 1 
+                       order by MATCH_NAME,  PROB) b,
+                LOT_CORP c
+          where a.MATCH_NAME = b.MATCH_NAME
+                and a.ODDS_CORP_NAME = b.ODDS_CORP_NAME
+                and a.ODDS_CORP_NAME = c.CORP_NAME 
+                and a.RULE_TYPE='K4' 
+                and a.OK_URL_DATE=#okUrlDate#
+    </select>
+    
+    <select id="highK3WinEvenPredict" parameterClass="java.lang.String" resultMap="HighKellyPredictMapFor2">
+        select e.OK_URL_DATE, e.MATCH_NAME, e.ODDS_CORP_NAME, e.ALL_SEQ, e.WIN_SEQ, e.EVEN_SEQ, d.WIN_EVEN_COUNT PROCESSED_COUNT, d.ALL_COUNT
+          from (select c.MATCH_NAME, c.ODDS_CORP_NAME, c.WIN_EVEN_COUNT, c.ALL_COUNT, c.WIN_EVEN_PROB
+                  from (select a.MATCH_NAME, a.ODDS_CORP_NAME, a.WIN_EVEN_COUNT, b.ALL_COUNT, a.WIN_EVEN_COUNT/b.ALL_COUNT WIN_EVEN_PROB 
+                          from (select MATCH_NAME, ODDS_CORP_NAME, count(*) WIN_EVEN_COUNT 
+                                  from LOT_KELLY_CORP_RESULT 
+                                 where RULE_TYPE='K3' 
+                                       AND OK_URL_DATE &lt; #okUrlDate#
+                                       AND NEGA_PROB=0 
+                                       group by MATCH_NAME, ODDS_CORP_NAME) a, 
+                               (select MATCH_NAME, ODDS_CORP_NAME, count(*) ALL_COUNT 
+                                  from LOT_KELLY_CORP_RESULT 
+                                 WHERE RULE_TYPE='K3' 
+                                       AND OK_URL_DATE &lt; #okUrlDate# 
+                                       group by MATCH_NAME, ODDS_CORP_NAME) b 
+                          where a.MATCH_NAME=b.MATCH_NAME 
+                                and a.ODDS_CORP_NAME=b.ODDS_CORP_NAME) c
+                  where c.WIN_EVEN_PROB &gt; 0.9 
+                        and c.ALL_COUNT &gt; 5 ) d, 
+                  LOT_KELLY_CORP_RESULT e 
+          where d.MATCH_NAME=e.MATCH_NAME 
+                and d.ODDS_CORP_NAME=e.ODDS_CORP_NAME 
+                and e.RULE_TYPE='K3' 
+                and e.OK_URL_DATE=#okUrlDate#;
+    </select>
+    
+    <select id="highK4EvenNegaPredict" parameterClass="java.lang.String" resultMap="HighKellyPredictMapFor2">
+        select e.OK_URL_DATE, e.MATCH_NAME, e.ODDS_CORP_NAME, e.ALL_SEQ, e.WIN_SEQ, e.EVEN_SEQ, d.EVEN_NEGA_COUNT PROCESSED_COUNT, d.ALL_COUNT 
+          from (select c.MATCH_NAME, c.ODDS_CORP_NAME, c.EVEN_NEGA_COUNT, c.ALL_COUNT, c.EVEN_NEGA_PROB 
+                  from (select a.MATCH_NAME, a.ODDS_CORP_NAME, a.EVEN_NEGA_COUNT, b.ALL_COUNT, a.EVEN_NEGA_COUNT/b.ALL_COUNT EVEN_NEGA_PROB 
+                          from (select MATCH_NAME, ODDS_CORP_NAME, count(*) EVEN_NEGA_COUNT 
+                                  from LOT_KELLY_CORP_RESULT 
+                                 where RULE_TYPE='K4' 
+                                       AND OK_URL_DATE &lt; #okUrlDate# 
+                                       AND WIN_PROB=0 
+                                       group by MATCH_NAME, ODDS_CORP_NAME) a, 
+                               (select MATCH_NAME, ODDS_CORP_NAME, count(*) ALL_COUNT 
+                                  from LOT_KELLY_CORP_RESULT 
+                                 WHERE RULE_TYPE='K4' 
+                                       AND OK_URL_DATE &lt; #okUrlDate# 
+                                       group by MATCH_NAME, ODDS_CORP_NAME) b 
+                          where a.MATCH_NAME = b.MATCH_NAME 
+                                and a.ODDS_CORP_NAME=b.ODDS_CORP_NAME) c 
+                 where c.EVEN_NEGA_PROB &gt; 0.9 
+                       and c.ALL_COUNT &gt; 3 ) d, 
+                LOT_KELLY_CORP_RESULT e 
+          where d.MATCH_NAME=e.MATCH_NAME 
+                and d.ODDS_CORP_NAME=e.ODDS_CORP_NAME 
+                and e.RULE_TYPE='K4' 
+                and e.OK_URL_DATE=#okUrlDate#;
+    </select>
+    
+    <select id="queryLatestOkUrlDateFromKellyCorpResult" resultMap="okUrlDateKellyCOrpResult">
+        select distinct OK_URL_DATE from LOT_KELLY_CORP_RESULT where OK_URL_DATE >= '141001' and (ALL_SEQ LIKE '1|%' OR ALL_SEQ LIKE'2|%' OR ALL_SEQ LIKE '3|%')
+    </select>
+</sqlMap>

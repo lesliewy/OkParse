@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Corp">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="Corp" type="com.wy.okooo.domain.Corp" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="CorpResult" class="Corp">
+		<result property="corpNo" column="CORP_NO" />
+		<result property="corpName" column="CORP_NAME" />
+		<result property="timestamp" column="TIMESTAMP" />
+		<result property="euroTimeBeforeMatch" column="EURO_TIME_BEFORE_MATCH" />
+	</resultMap>
+
+	<insert id="insertCorp" parameterClass="Corp">
+		insert into LOT_CORP (
+		CORP_NO,
+		CORP_NAME,
+		TIMESTAMP)
+		values (
+		#corpNo#, #corpName#,  #timestamp#
+		)
+	</insert>
+	
+    <select id="queryAllCorp" resultMap="CorpResult">
+        select CORP_NO,CORP_NAME, TIMESTAMP, EURO_TIME_BEFORE_MATCH
+        from LOT_CORP
+    </select>
+
+    <update id="updateTimeBeforeMatch" parameterClass="Corp">
+        update LOT_CORP set EURO_TIME_BEFORE_MATCH=#euroTimeBeforeMatch# where CORP_NAME=#corpName#
+    </update>
+</sqlMap>

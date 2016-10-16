@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MatchJob">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="MatchJob" type="com.wy.okooo.domain.MatchJob" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="MatchJobResult" class="MatchJob">
+		<result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="beginMatchSeq" column="BEGIN_MATCH_SEQ" />
+		<result property="endMatchSeq" column="END_MATCH_SEQ" />
+		<result property="jobType" column="JOB_TYPE" />
+		<result property="status" column="STATUS" />
+		<result property="remark" column="REMARK" />
+		<result property="beginTime" column="BEGIN_TIME" />
+		<result property="timestamp" column="TIMESTAMP" />
+		<result property="timeType" column="TIME_TYPE" />
+	</resultMap>
+	
+    <resultMap id="OkUrlDateResult" class="MatchJob">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+    </resultMap>
+
+	<insert id="insertJob" parameterClass="MatchJob">
+		insert into LOT_JOB (
+		OK_URL_DATE,
+		BEGIN_MATCH_SEQ,
+		END_MATCH_SEQ,
+		JOB_TYPE,
+		STATUS,
+		REMARK,
+		BEGIN_TIME,
+		TIMESTAMP,
+		TIME_TYPE)
+		values (
+		#okUrlDate#, #beginMatchSeq#, #endMatchSeq#,
+		#jobType#, #status#, #remark#, #beginTime#, #timestamp#, #timeType#
+		)
+	</insert>
+
+	<select id="queryJobsById" parameterClass="MatchJob"
+		resultMap="MatchJobResult">
+		select OK_URL_DATE,BEGIN_MATCH_SEQ, END_MATCH_SEQ, JOB_TYPE, STATUS,
+		REMARK, BEGIN_TIME, TIMESTAMP, TIME_TYPE
+		from LOT_JOB
+		where OK_URL_DATE = #okUrlDate# 
+		      AND BEGIN_MATCH_SEQ = #beginMatchSeq#
+		      AND JOB_TYPE = #jobType#
+		      AND STATUS = #status#
+	</select>
+	
+	<select id="queryMaxBeginSeqByOkUrlDate" parameterClass="MatchJob"
+        resultClass="java.lang.Integer">
+        select max(BEGIN_MATCH_SEQ) BEGIN_MATCH_SEQ
+        from LOT_JOB
+        where OK_URL_DATE = #okUrlDate# 
+              AND LEFT(JOB_TYPE, 1)= #jobFlag#
+    </select>
+    
+    <select id="queryJobByDateStatus" parameterClass="MatchJob"
+        resultMap="MatchJobResult">
+        select OK_URL_DATE,BEGIN_MATCH_SEQ, END_MATCH_SEQ, JOB_TYPE, STATUS,
+        REMARK, BEGIN_TIME, TIMESTAMP, TIME_TYPE
+         from LOT_JOB
+        where OK_URL_DATE = #okUrlDate# 
+              AND LEFT(JOB_TYPE, 1)= #jobFlag#
+              AND STATUS = #status#
+    </select>
+     
+    <select id="queryOkUrlDateFromMatchJob" resultMap="OkUrlDateResult">
+        select DISTINCT OK_URL_DATE FROM LOT_JOB ORDER BY OK_URL_DATE desc
+    </select>
+    
+    <update id="updateR2S" parameterClass="MatchJob">
+        UPDATE LOT_JOB SET STATUS = 'S', REMARK = #remark#, TIMESTAMP = #timestamp# WHERE OK_URL_DATE=#okUrlDate# AND STATUS='R' AND LEFT(JOB_TYPE, 1)= #jobType#
+    </update>
+    
+    <update id="updateR2D" parameterClass="MatchJob">
+        UPDATE LOT_JOB SET STATUS = 'D', REMARK = #remark#, TIMESTAMP = #timestamp#
+        WHERE STATUS='R' AND TIME_TO_SEC(TIMEDIFF(NOW(),  BEGIN_TIME)) > #delRUpperLimit# 
+              AND LEFT(JOB_TYPE, 1)= #jobFlag#
+    </update>
+    
+    <delete id="deleteJobById" parameterClass="MatchJob">
+        delete from LOT_JOB
+        where OK_URL_DATE = #okUrlDate# 
+              AND BEGIN_MATCH_SEQ = #beginMatchSeq#
+              AND JOB_TYPE = #jobType#
+              AND STATUS = #status#
+    </delete>
+
+</sqlMap>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MatchSkip">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="MatchSkip" type="com.wy.okooo.domain.MatchSkip" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="MatchSkipResult" class="MatchSkip">
+		<result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="matchSeq" column="MATCH_SEQ" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+    <select id="querySkipMatchesByOkUrlDate" parameterClass="java.lang.String" resultMap="MatchSkipResult">
+        select OK_URL_DATE, MATCH_SEQ, TIMESTAMP
+        from LOT_MATCH_SKIP
+       where OK_URL_DATE=#okUrlDate#
+    </select>
+
+</sqlMap>

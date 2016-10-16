@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TurnoverDetail">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="TurnoverDetail" type="com.wy.okooo.domain.ExchangeBfTurnoverDetail" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="TurnoverDetailResult" class="TurnoverDetail">
+		<result property="id" column="ID" />
+		<result property="seq" column="SEQ" />
+		<result property="toTime" column="TO_TIME" />
+		<result property="hostPrice" column="HOST_PRICE" />
+		<result property="hostTotal" column="HOST_TOTAL" />
+        <result property="hostSingle" column="HOST_SINGLE" />
+        <result property="hostBuySell" column="HOST_BUY_SELL" />
+        <result property="evenPrice" column="EVEN_PRICE" />
+        <result property="evenTotal" column="EVEN_TOTAL" />
+        <result property="evenSingle" column="EVEN_SINGLE" />
+        <result property="evenBuySell" column="EVEN_BUY_SELL" />
+        <result property="visitingPrice" column="VISITING_PRICE" />
+        <result property="visitingTotal" column="VISITING_TOTAL" />
+        <result property="visitingSingle" column="VISITING_SINGLE" />
+        <result property="visitingBuySell" column="VISITING_BUY_SELL" />
+        <result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertTurnoverDetail" parameterClass="TurnoverDetail">
+		insert into
+		LOT_BF_TURNOVER_DETAIL (
+		ID,
+		SEQ,
+		TO_TIME,
+		HOST_PRICE,
+		HOST_TOTAL,
+		HOST_SINGLE,
+		HOST_BUY_SELL,
+		EVEN_PRICE,
+		EVEN_TOTAL,
+		EVEN_SINGLE,
+		EVEN_BUY_SELL,
+		VISITING_PRICE,
+		VISITING_TOTAL,
+		VISITING_SINGLE,
+		VISITING_BUY_SELL,
+		TIMESTAMP)
+		values (
+		#id#, #seq#,
+		#toTime#,#hostPrice#,#hostTotal#,#hostSingle#,#hostBuySell#,
+		#evenPrice#,#evenTotal#,#evenSingle#,#evenBuySell#,#visitingPrice#,#visitingTotal#,#visitingSingle#,
+		#visitingBuySell#, #timestamp#
+		)
+	</insert>
+	<delete id="deleteTurnoverDetail" parameterClass="java.util.Map">
+		delete from LOT_BF_TURNOVER_DETAIL where id = #id# and seq = #seq#
+	</delete>
+	
+    <select id="queryBfTurnoverDetailById" parameterClass="java.lang.Long"
+        resultMap="TurnoverDetailResult">
+        select ID,SEQ, TO_TIME, HOST_PRICE, HOST_TOTAL, HOST_SINGLE,
+        HOST_BUY_SELL, EVEN_PRICE, EVEN_TOTAL, EVEN_SINGLE, EVEN_BUY_SELL, VISITING_PRICE, VISITING_TOTAL, VISITING_SINGLE,
+        VISITING_BUY_SELL, TIMESTAMP
+        from LOT_ALL_AVERAGE
+        where ID = #id#
+    </select>
+
+</sqlMap>

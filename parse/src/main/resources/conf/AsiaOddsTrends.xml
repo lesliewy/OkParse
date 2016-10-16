@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AsiaOddsTrends">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="AsiaOddsTrends" type="com.wy.okooo.domain.AsiaOddsTrends" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="AsiaOddsTrendsResult" class="AsiaOddsTrends">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+	    <result property="matchSeq" column="MATCH_SEQ" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="jobType" column="JOB_TYPE" />
+		<result property="matchName" column="MATCH_NAME" />
+		<result property="initTime" column="INIT_TIME" />
+        <result property="initHandicap" column="INIT_HANDICAP" />
+        <result property="initHostOdds" column="INIT_HOST_ODDS" />
+        <result property="initVisitingOdds" column="INIT_VISITING_ODDS" />
+		<result property="hostOdds" column="HOST_ODDS" />
+		<result property="handicap" column="HANDICAP" />
+		<result property="visitingOdds" column="VISITING_ODDS" />
+		<result property="hostKelly" column="HOST_KELLY" />
+		<result property="visitingKelly" column="VISITING_KELLY" />
+		<result property="lossRatio" column="LOSS_RATIO" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+	
+    <resultMap id="AsiaOddsTrendsResult1" class="AsiaOddsTrends">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+        <result property="matchSeq" column="MATCH_SEQ" />
+        <result property="jobType" column="JOB_TYPE" />
+    </resultMap>
+    
+    <resultMap id="AsiaOddsTrendsResult2" class="AsiaOddsTrends">
+        <result property="allHostKelly" column="ALL_HOST_KELLY" />
+        <result property="allVisitingKelly" column="ALL_VISITING_KELLY" />
+    </resultMap>
+
+	<insert id="insertAsiaOddsTrends" parameterClass="AsiaOddsTrends">
+		insert into LOT_ODDS_ASIA_TRENDS (
+		OK_URL_DATE,
+		MATCH_SEQ,
+		ODDS_CORP_NAME,
+		JOB_TYPE,
+		MATCH_NAME,
+		INIT_TIME,
+		INIT_HANDICAP,
+		INIT_HOST_ODDS,
+		INIT_VISITING_ODDS,
+		HOST_ODDS,
+		HANDICAP,
+		VISITING_ODDS,
+		HOST_KELLY,
+		VISITING_KELLY,
+		LOSS_RATIO,
+		TIMESTAMP)
+		values (
+		#okUrlDate#, #matchSeq#, #oddsCorpName#, #jobType#, #matchName#, #initTime#, #initHandicap#, #initHostOdds#,
+		#initVisitingOdds#, #hostOdds#, #handicap#, #visitingOdds#,#hostKelly#,#visitingKelly#, #lossRatio#, #timestamp#
+		)
+	</insert>
+	
+	<select id="queryAsiaTrendsByRange" parameterClass="AsiaOddsTrends"
+        resultMap="AsiaOddsTrendsResult">
+        select *
+        from LOT_ODDS_ASIA_TRENDS
+        where OK_URL_DATE = #okUrlDate# and MATCH_SEQ &gt;= #beginMatchSeq# and MATCH_SEQ &lt;= #endMatchSeq#
+    </select>
+    
+    <select id="queryAsiaTrendsByJobType" parameterClass="AsiaOddsTrends"
+        resultMap="AsiaOddsTrendsResult1">
+        select distinct OK_URL_DATE, MATCH_SEQ, JOB_TYPE
+        from LOT_ODDS_ASIA_TRENDS
+        where OK_URL_DATE = #okUrlDate# and JOB_TYPE=#jobType#
+    </select>
+    
+    <select id="queryCurrMatchJobType" parameterClass="java.lang.String"
+        resultMap="AsiaOddsTrendsResult1">
+        select OK_URL_DATE, MATCH_SEQ, MAX(JOB_TYPE) JOB_TYPE
+          FROM LOT_ODDS_ASIA_TRENDS 
+         WHERE OK_URL_DATE=#okUrlDate# AND JOB_TYPE LIKE 'B%' GROUP BY OK_URL_DATE, MATCH_SEQ
+    </select>
+
+    <select id="queryKellyTrendsByDateJobType" parameterClass="AsiaOddsTrends"
+        resultMap="AsiaOddsTrendsResult2">
+        select group_concat(HOST_KELLY separator ',') ALL_HOST_KELLY,
+               group_concat(VISITING_KELLY separator ',') ALL_VISITING_KELLY
+        from LOT_ODDS_ASIA_TRENDS
+        where OK_URL_DATE = #okUrlDate#
+              AND MATCH_SEQ = #matchSeq#
+              AND JOB_TYPE = #jobType#
+              AND ODDS_CORP_NAME NOT IN (' 最大值', '最小值', '平均值')
+              AND LOSS_RATIO &gt;= 0.90 AND LOSS_RATIO &lt;= 0.94
+    </select>
+    
+    <select id="queryAsiaOddsTrendsByOkUrlDate" parameterClass="AsiaOddsTrends"
+        resultMap="AsiaOddsTrendsResult1">
+        select distinct OK_URL_DATE, MATCH_SEQ, JOB_TYPE
+          from LOT_ODDS_ASIA_TRENDS
+         where OK_URL_DATE = #okUrlDate# AND MATCH_SEQ &gt;= #beginMatchSeq# AND MATCH_SEQ &lt;= #endMatchSeq#
+    </select>
+    
+</sqlMap>

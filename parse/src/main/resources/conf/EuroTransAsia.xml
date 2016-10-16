@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EuroTransAsia">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="EuroTransAsia" type="com.wy.okooo.domain.EuroTransAsia" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="EuroTransAsiaResult" class="EuroTransAsia">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+	    <result property="matchSeq" column="MATCH_SEQ" />
+	    <result property="jobType" column="JOB_TYPE" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="hostOddsEuro" column="HOST_ODDS_EURO" />
+		<result property="evenOddsEuro" column="EVEN_ODDS_EURO" />
+		<result property="visitingOddsEuro" column="VISITING_ODDS_EURO" />
+		<result property="lossRatioEuro" column="LOSS_RATIO_EURO" />
+		<result property="hostOddsAsiaTrans" column="HOST_ODDS_ASIA_TRANS" />
+		<result property="handicapAsiaTrans" column="HANDICAP_ASIA_TRANS" />
+		<result property="visitingOddsAsiaTrans" column="VISITING_ODDS_ASIA_TRANS" />
+		<result property="totalDiscountTrans" column="TOTAL_DISCOUNT_TRANS" />
+		<result property="hostOddsAsia" column="HOST_ODDS_ASIA" />
+		<result property="handicapAsia" column="HANDICAP_ASIA" />
+		<result property="visitingOddsAsia" column="VISITING_ODDS_ASIA" />
+		<result property="totalDiscount" column="TOTAL_DISCOUNT" />
+		<result property="lossRatioAsia" column="LOSS_RATIO_ASIA" />
+		<result property="timestamp" column="TIMESTAMP" />
+		<result property="hostKellyAsia" column="HOST_KELLY_ASIA" />
+		<result property="visitingKellyAsia" column="VISITING_KELLY_ASIA" />
+		<result property="hostKellyEuro" column="HOST_KELLY_EURO" />
+		<result property="evenKellyEuro" column="EVEN_KELLY_EURO" />
+		<result property="visitingKellyEuro" column="VISITING_KELLY_EURO" />
+	</resultMap>
+
+	<insert id="insertEuroTransAsia" parameterClass="EuroTransAsia">
+		insert into LOT_EURO_TRANS_ASIA (
+		OK_URL_DATE,
+		MATCH_SEQ,
+		JOB_TYPE,
+		ODDS_CORP_NAME,
+		HOST_ODDS_EURO,
+		EVEN_ODDS_EURO,
+		VISITING_ODDS_EURO,
+		LOSS_RATIO_EURO,
+		HOST_ODDS_ASIA_TRANS,
+		HANDICAP_ASIA_TRANS,
+		VISITING_ODDS_ASIA_TRANS,
+		TOTAL_DISCOUNT_TRANS,
+		HOST_ODDS_ASIA,
+		HANDICAP_ASIA,
+		VISITING_ODDS_ASIA,
+		TOTAL_DISCOUNT,
+		LOSS_RATIO_ASIA,
+		TIMESTAMP,
+		HOST_KELLY_ASIA,
+		VISITING_KELLY_ASIA,
+		HOST_KELLY_EURO,
+		EVEN_KELLY_EURO,
+		VISITING_KELLY_EURO)
+		values (
+		#okUrlDate#, #matchSeq#, #jobType#, #oddsCorpName#, #hostOddsEuro#, #evenOddsEuro#,
+		#visitingOddsEuro#,#lossRatioEuro#,#hostOddsAsiaTrans#, #handicapAsiaTrans#, #visitingOddsAsiaTrans#,#totalDiscountTrans#,
+		#hostOddsAsia#, #handicapAsia#, #visitingOddsAsia#, #totalDiscount#, #lossRatioAsia#, #timestamp#, #hostKellyAsia#, #visitingKellyAsia#,
+		#hostKellyEuro#, #evenKellyEuro#, #visitingKellyEuro#
+		)
+	</insert>
+	
+    <select id="queryEuroTransAsiaByOkUrlDate" parameterClass="EuroTransAsia"
+        resultMap="EuroTransAsiaResult">
+        select *
+          from LOT_EURO_TRANS_ASIA
+         where OK_URL_DATE = #okUrlDate# AND MATCH_SEQ &gt;= #beginMatchSeq# AND MATCH_SEQ &lt;= #endMatchSeq#
+    </select>
+    
+    <select id="queryEuroTransAsiaByDateType" parameterClass="EuroTransAsia"
+        resultMap="EuroTransAsiaResult">
+        select *
+          from LOT_EURO_TRANS_ASIA
+         where OK_URL_DATE = #okUrlDate# AND MATCH_SEQ &gt;= #beginMatchSeq# AND MATCH_SEQ &lt;= #endMatchSeq#
+               AND JOB_TYPE = #jobType#
+    </select>
+
+</sqlMap>

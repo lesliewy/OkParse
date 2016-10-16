@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EuropeOdds">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="EuropeOdds" type="com.wy.okooo.domain.EuropeOdds" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="EuropeOddsResult" class="EuropeOdds">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+	    <result property="matchSeq" column="MATCH_SEQ" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="hostOdds" column="HOST_ODDS" />
+		<result property="evenOdds" column="EVEN_ODDS" />
+		<result property="visitingOdds" column="VISITING_ODDS" />
+		<result property="initTime" column="INIT_TIME" />
+		<result property="initHostOdds" column="INIT_HOST_ODDS" />
+		<result property="initEvenOdds" column="INIT_EVEN_ODDS" />
+		<result property="initVisitingOdds" column="INIT_VISITING_ODDS" />
+		<result property="hostKelly" column="HOST_KELLY" />
+		<result property="evenKelly" column="EVEN_KELLY" />
+		<result property="visitingKelly" column="VISITING_KELLY" />
+		<result property="lossRatio" column="LOSS_RATIO" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+	
+    <resultMap id="EuropeOddsCorpName" class="EuropeOdds">
+        <result property="oddsCorpName" column="ODDS_CORP_NAME" />
+    </resultMap>
+
+    <resultMap id="EuropeOddsResult1" class="EuropeOdds">
+        <result property="hostKelly" column="HOST_KELLY" />
+        <result property="evenKelly" column="EVEN_KELLY" />
+        <result property="visitingKelly" column="VISITING_KELLY" />
+        <result property="lossRatio" column="LOSS_RATIO" />
+        <result property="hostGoals" column="HOST_GOALS" />
+        <result property="visitingGoals" column="VISITING_GOALS" />
+    </resultMap>
+    
+	<insert id="insertEuroOdds" parameterClass="EuropeOdds">
+		insert into LOT_ODDS_EURO (
+		OK_URL_DATE,
+		MATCH_SEQ,
+		ODDS_CORP_NAME,
+		HOST_ODDS,
+		EVEN_ODDS,
+		VISITING_ODDS,
+		INIT_TIME,
+		INIT_HOST_ODDS,
+		INIT_EVEN_ODDS,
+		INIT_VISITING_ODDS,
+		HOST_KELLY,
+		EVEN_KELLY,
+		VISITING_KELLY,
+		LOSS_RATIO,
+		TIMESTAMP)
+		values (
+		#okUrlDate#, #matchSeq#, #oddsCorpName#, #hostOdds#,
+		#evenOdds#,#visitingOdds#,#initTime#,#initHostOdds#,#initEvenOdds#,#initVisitingOdds#,#hostKelly#, #evenKelly#,
+		#visitingKelly#, #lossRatio#,#timestamp#
+		)
+	</insert>
+    <delete id="deleteEuroOdds" parameterClass="EuropeOdds">
+        delete from LOT_ODDS_EURO where OK_URL_DATE = #okUrlDate# AND MATCH_SEQ = #matchSeq#
+    </delete>
+
+    <select id="queryEuropeOddsByKey" parameterClass="EuropeOdds"
+        resultMap="EuropeOddsResult">
+        select OK_URL_DATE, MATCH_SEQ, ODDS_CORP_NAME, HOST_ODDS, EVEN_ODDS, VISITING_ODDS,
+        INIT_TIME, INIT_HOST_ODDS,INIT_EVEN_ODDS,INIT_VISITING_ODDS, HOST_KELLY, EVEN_KELLY, VISITING_KELLY, LOSS_RATIO,
+        TIMESTAMP
+        from LOT_ODDS_EURO
+        where OK_URL_DATE = #okUrlDate#
+              AND MATCH_SEQ = #matchSeq#
+    </select>
+
+    <select id="queryAllCorpNames"
+        resultMap="EuropeOddsCorpName">
+        select distinct ODDS_CORP_NAME from LOT_ODDS_EURO
+    </select>
+    
+    <select id="queryEuropeOddsByOkId" parameterClass="java.util.HashMap"
+        resultMap="EuropeOddsResult">
+        select a.*
+          from LOT_ODDS_EURO a, LOT_MATCH b 
+         where a.OK_URL_DATE=b.OK_URL_DATE
+               and a.MATCH_SEQ = b.MATCH_SEQ
+               and b.OK_URL_DATE=#okUrlDate#
+               and b.MATCH_SEQ=#matchSeq#
+               and a.ODDS_CORP_NAME='99家平均'
+    </select>
+    <select id="queryEuroOddsByCorpName" parameterClass="java.lang.String"
+        resultMap="EuropeOddsResult1">
+        select a.HOST_KELLY, a.EVEN_KELLY, a.VISITING_KELLY, a.LOSS_RATIO, b.HOST_GOALS, b.VISITING_GOALS
+          from LOT_ODDS_EURO a, LOT_MATCH b 
+         where a.OK_URL_DATE=b.OK_URL_DATE
+               and a.MATCH_SEQ = b.MATCH_SEQ
+               and a.ODDS_CORP_NAME=#oddsCorpName#
+    </select>
+</sqlMap>

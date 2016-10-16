@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AllAverage">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="AllAverage" type="com.wy.okooo.domain.ExchangeAllAverage" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="AllAverageResult" class="AllAverage">
+		<result property="id" column="ID" />
+		<result property="hostOdds" column="HOST_ODDS" />
+		<result property="evenOdds" column="EVEN_ODDS" />
+		<result property="visitingOdds" column="VISITING_ODDS" />
+		<result property="hostProb" column="HOST_PROB" />
+		<result property="evenProb" column="EVEN_PROB" />
+		<result property="visitingProb" column="VISITING_PROB" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertAllAverage" parameterClass="AllAverage">
+		insert into
+		LOT_ALL_AVERAGE (
+		ID,
+		HOST_ODDS,
+		EVEN_ODDS,
+		VISITING_ODDS,
+		HOST_PROB,
+		EVEN_PROB,
+		VISITING_PROB,
+		TIMESTAMP)
+		values (
+		#id#, #hostOdds#,
+		#evenOdds#,#visitingOdds#,#hostProb#,#evenProb#,#visitingProb#, #timestamp#
+		)
+	</insert>
+	<delete id="deleteAllAverage" parameterClass="java.lang.Long">
+		delete from LOT_ALL_AVERAGE where id = #id#
+	</delete>
+	
+    <select id="queryAllAverageById" parameterClass="java.lang.Long"
+        resultMap="AllAverageResult">
+        select ID,HOST_ODDS, EVEN_ODDS, VISITING_ODDS, HOST_PROB, EVEN_PROB,
+        VISITING_PROB, TIMESTAMP
+        from LOT_ALL_AVERAGE
+        where ID = #id#
+    </select>
+
+</sqlMap>

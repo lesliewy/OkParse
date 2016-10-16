@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EuroOddsHandicap">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="EuroOddsHandicap" type="com.wy.okooo.domain.EuroOddsHandicap" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="EuroOddsHandicapResult" class="EuroOddsHandicap">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="matchSeq" column="MATCH_SEQ" />
+		<result property="jobType" column="JOB_TYPE" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="euroHandicap" column="EURO_HANDICAP" />
+		<result property="compHandicap" column="COMP_HANDICAP" />
+        <result property="initHostOdds" column="INIT_HOST_ODDS" />
+        <result property="initEvenOdds" column="INIT_EVEN_ODDS" />
+        <result property="initVisitingOdds" column="INIT_VISITING_ODDS" />
+		<result property="hostOdds" column="HOST_ODDS" />
+        <result property="evenOdds" column="EVEN_ODDS" />
+        <result property="visitingOdds" column="VISITING_ODDS" />
+        <result property="hostKelly" column="HOST_KELLY" />
+        <result property="evenKelly" column="EVEN_KELLY" />
+        <result property="visitingKelly" column="VISITING_KELLY" />
+        <result property="lossRatio" column="LOSS_RATIO" />
+        <result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+	
+    <resultMap id="EuroOddsHandicapResult1" class="EuroOddsHandicap">
+        <result property="allHostOdds" column="ALL_HOST_ODDS" />
+        <result property="allEvenOdds" column="ALL_EVEN_ODDS" />
+        <result property="allVisitingOdds" column="ALL_VISITING_ODDS" />
+        <result property="allHostKelly" column="ALL_HOST_KELLY" />
+        <result property="allEvenKelly" column="ALL_EVEN_KELLY" />
+        <result property="allVisitingKelly" column="ALL_VISITING_KELLY" />
+        <result property="compHandicap" column="COMP_HANDICAP" />
+    </resultMap>
+    
+    <resultMap id="EuroOddsHandicapResult2" class="EuroOddsHandicap">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+        <result property="matchSeq" column="MATCH_SEQ" />
+        <result property="jobType" column="JOB_TYPE" />
+    </resultMap>
+	
+	<insert id="insertEuroOddsHandicap" parameterClass="EuroOddsHandicap">
+		insert into LOT_ODDS_EURO_HANDICAP (
+		OK_URL_DATE,
+		MATCH_SEQ,
+		JOB_TYPE,
+		ODDS_CORP_NAME,
+		EURO_HANDICAP,
+		COMP_HANDICAP,
+		INIT_HOST_ODDS,
+		INIT_EVEN_ODDS,
+		INIT_VISITING_ODDS,
+		HOST_ODDS,
+		EVEN_ODDS,
+		VISITING_ODDS,
+		HOST_KELLY,
+		EVEN_KELLY,
+		VISITING_KELLY,
+		LOSS_RATIO,
+		TIMESTAMP)
+		values (
+		#okUrlDate#, #matchSeq#, #jobType#,#oddsCorpName#,#euroHandicap#, #compHandicap#, #initHostOdds#, #initEvenOdds#,
+		#initVisitingOdds#, #hostOdds#, #evenOdds#, #visitingOdds#, #hostKelly#, #evenKelly#, #visitingKelly#, #lossRatio#,
+		#timestamp#
+		)
+	</insert>
+	
+    <select id="queryTransByDateJobType" parameterClass="EuroOddsHandicap"
+        resultMap="EuroOddsHandicapResult1">
+        select group_concat(HOST_ODDS separator ',') ALL_HOST_ODDS,
+               group_concat(EVEN_ODDS separator ',') ALL_EVEN_ODDS,
+               group_concat(VISITING_ODDS separator ',') ALL_VISITING_ODDS, 
+               group_concat(HOST_KELLY separator ',') ALL_HOST_KELLY,
+               group_concat(EVEN_KELLY separator ',') ALL_EVEN_KELLY,
+               group_concat(VISITING_KELLY separator ',') ALL_VISITING_KELLY,
+               COMP_HANDICAP
+        from LOT_ODDS_EURO_HANDICAP
+        where OK_URL_DATE = #okUrlDate#
+              AND MATCH_SEQ = #matchSeq#
+              AND JOB_TYPE = #jobType#
+              AND EURO_HANDICAP = COMP_HANDICAP
+    </select>
+
+    <select id="queryCurrJobTypeEuroHandicap" parameterClass="java.lang.String"
+        resultMap="EuroOddsHandicapResult2">
+    SELECT OK_URL_DATE, MATCH_SEQ, MAX(JOB_TYPE) JOB_TYPE 
+      FROM LOT_ODDS_EURO_HANDICAP
+     WHERE OK_URL_DATE=#okUrlDate# AND JOB_TYPE LIKE 'D%' GROUP BY OK_URL_DATE, MATCH_SEQ
+
+    </select>
+	
+</sqlMap>

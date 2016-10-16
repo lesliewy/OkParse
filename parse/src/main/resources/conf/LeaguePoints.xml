@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="LeaguePoints">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="LeaguePoints" type="com.wy.okooo.domain.LeaguePoints" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="LeaguePointsResult" class="LeaguePoints">
+	    <result property="leagueTime" column="LEAGUE_TIME" />
+		<result property="leagueId" column="LEAGUE_ID" />
+		<result property="leagueName" column="LEAGUE_NAME" />
+		<result property="rank" column="RANK" />
+		<result property="teamName" column="TEAM_NAME" />
+		<result property="totalMatch" column="TOTAL_MATCH" />
+		<result property="totalWin" column="TOTAL_WIN" />
+		<result property="totalEven" column="TOTAL_EVEN" />
+		<result property="totalNega" column="TOTAL_NEGA" />
+		<result property="totalGoals" column="TOTAL_GOALS" />
+		<result property="totalLost" column="TOTAL_LOST" />
+		<result property="totalGoalsDiff" column="TOTAL_GOALS_DIFF" />
+		<result property="hostMatch" column="HOST_MATCH" />
+        <result property="hostWin" column="HOST_WIN" />
+        <result property="hostEven" column="HOST_EVEN" />
+        <result property="hostNega" column="HOST_NEGA" />
+        <result property="hostGoals" column="HOST_GOALS" />
+        <result property="hostLost" column="HOST_LOST" />
+        <result property="visitingMatch" column="VISITING_MATCH" />
+        <result property="visitingWin" column="VISITING_WIN" />
+        <result property="visitingEven" column="VISITING_EVEN" />
+        <result property="visitingNega" column="VISITING_NEGA" />
+        <result property="visitingGoals" column="VISITING_GOALS" />
+        <result property="visitingLost" column="VISITING_LOST" />
+        <result property="points" column="POINTS" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertLeaguePoints" parameterClass="LeaguePoints">
+		insert into LOT_LEAGUE_POINTS (
+		LEAGUE_TIME,
+		LEAGUE_ID,
+		LEAGUE_NAME,
+		RANK,
+		TEAM_NAME,
+		TOTAL_MATCH,
+		TOTAL_WIN,
+		TOTAL_EVEN,
+		TOTAL_NEGA,
+		TOTAL_GOALS,
+		TOTAL_LOST,
+		TOTAL_GOALS_DIFF,
+		HOST_MATCH,
+        HOST_WIN,
+        HOST_EVEN,
+        HOST_NEGA,
+        HOST_GOALS,
+        HOST_LOST,
+        VISITING_MATCH,
+        VISITING_WIN,
+        VISITING_EVEN,
+        VISITING_NEGA,
+        VISITING_GOALS,
+        VISITING_LOST,
+		POINTS,
+		TIMESTAMP)
+		values (
+		#leagueTime#, #leagueId#, #leagueName#, #rank#,
+		#teamName#,
+		#totalMatch#,#totalWin#,#totalEven#,#totalNega#,#totalGoals#, #totalLost#, #totalGoalsDiff#, 
+		#hostMatch#,#hostWin#,#hostEven#,#hostNega#,#hostGoals#, #hostLost#,
+		#visitingMatch#,#visitingWin#,#visitingEven#,#visitingNega#,#visitingGoals#, #visitingLost#,
+		#points#,
+		#timestamp#
+		)
+	</insert>
+	<delete id="deleteLeaguePointsByLeague" parameterClass="LeaguePoints">
+		delete from LOT_LEAGUE_POINTS
+		where LEAGUE_TIME = #leagueTime#
+		      and LEAGUE_ID = #leagueId#
+	</delete>
+	
+	<!-- 排除掉杯赛 -->
+	<select id="queryLatestLeagPtsByTeamName" parameterClass="java.lang.String" resultMap="LeaguePointsResult">
+        select * from LOT_LEAGUE_POINTS WHERE TEAM_NAME=#teamName# AND LEAGUE_ID NOT IN(7, 210, 679, 246, 270) order by LEAGUE_TIME DESC limit 1
+	</select>
+	
+    <select id="queryLatestLeagPtsByLeagueName" parameterClass="LeaguePoints" resultMap="LeaguePointsResult">
+        select * from LOT_LEAGUE_POINTS WHERE LEAGUE_NAME=#leagueName# and LEAGUE_TIME=#leagueTime#
+    </select>
+</sqlMap>

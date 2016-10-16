@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KellyCorpCount">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="KellyCorpCount" type="com.wy.okooo.domain.KellyCorpCount" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="KellyCorpCount" class="KellyCorpCount">
+		<result property="matchName" column="MATCH_NAME" />
+		<result property="beginHostOdds" column="BEGIN_HOST_ODDS" />
+		<result property="endHostOdds" column="END_HOST_ODDS" />
+		<result property="corpCountWin" column="CORP_COUNT_WIN" />
+        <result property="ruleType" column="RULE_TYPE" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertCorpCount" parameterClass="KellyCorpCount">
+		insert into LOT_KELLY_CORP_COUNT (
+		MATCH_NAME,
+		BEGIN_HOST_ODDS,
+		END_HOST_ODDS,
+		CORP_COUNT_WIN,
+		RULE_TYPE,
+		TIMESTAMP)
+		values (
+		#matchName#, #beginHostOdds#,
+		#endHostOdds#, #corpCountWin#, #ruleType#, #timestamp#
+		)
+	</insert>
+	
+    <delete id="deleteCorpCountByMatchName" parameterClass="java.lang.String">
+        delete from LOT_KELLY_CORP_COUNT WHERE MATCH_NAME=#matchName#
+    </delete>
+	
+</sqlMap>

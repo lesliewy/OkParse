@@ -1,0 +1,10 @@
+delete from LOT_MATCH where timestamp > '2014-11-09 09:11:00';
+delete from LOT_BF_LISTING where timestamp > '2014-11-09 09:11:00';
+delete from LOT_ALL_AVERAGE where timestamp > '2014-11-09 09:11:00';
+delete from LOT_TRANS_PROP where timestamp > '2014-11-09 09:11:00';
+delete from LOT_BF_TURNOVER_DETAIL where timestamp > '2014-11-09 09:11:00';
+delete from LOT_ODDS_EURO where timestamp > '2014-11-09 09:11:00';
+delete from LOT_ODDS_ASIA where timestamp > '2014-11-09 09:11:00';
+delete from LOT_ODDS_EURO_CHANGE where timestamp > '2014-11-09 09:11:00';
+delete from LOT_ODDS_ASIA_CHANGE where timestamp > '2014-11-09 09:11:00';
+commit;

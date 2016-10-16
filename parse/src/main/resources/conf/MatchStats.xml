@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MatchStats">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="MatchStats" type="com.wy.okooo.domain.MatchStats" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="MatchStatsResult" class="MatchStats">
+		<result property="okMatchId" column="OK_MATCH_ID" />
+		<result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="matchSeq" column="MATCH_SEQ" />
+		<result property="shotsOnTarget" column="SHOTS_ON_TARGET" />
+		<result property="shotsOffTarget" column="SHOTS_OFF_TARGET" />
+		<result property="freeKick" column="FREE_KICK" />
+		<result property="corners" column="CORNERS" />
+		<result property="throwIns" column="THROW_INS" />
+        <result property="goalkeeperDist" column="GOALKEEPER_DIST" />
+        <result property="beatOutShot" column="BEAT_OUT_SHOT" />
+        <result property="offside" column="OFFSIDE" />
+        <result property="foulCommitted" column="FOUL_COMMITTED" />
+        <result property="possession" column="POSSESSION" />		
+		<result property="timestamp" column="TIMESTAMP" />
+		<result property="goalTime" column="GOAL_TIME" />
+	</resultMap>
+	
+    <resultMap id="OkUrlDateResult" class="MatchStats">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+    </resultMap>
+
+	<insert id="insertMatchStats" parameterClass="MatchStats">
+		insert into LOT_MATCH_STATS (
+		OK_MATCH_ID,
+		OK_URL_DATE,
+		MATCH_SEQ,
+		SHOTS_ON_TARGET,
+		SHOTS_OFF_TARGET,
+		FREE_KICK,
+		CORNERS,
+		THROW_INS,
+		GOALKEEPER_DIST,
+		BEAT_OUT_SHOT,
+		OFFSIDE,
+		FOUL_COMMITTED,
+		POSSESSION,
+		GOAL_TIME,
+		TIMESTAMP)
+		values (
+		#okMatchId#, #okUrlDate#, #matchSeq#, #shotsOnTarget#, #shotsOffTarget#, #freeKick#, #corners#,
+		#throwIns#, #goalkeeperDist#, #beatOutShot#, #offside#,
+		#foulCommitted#, #possession#, #goalTime#, #timestamp#
+		)
+	</insert>
+	
+	<delete id="deleteMatchStats" parameterClass="java.lang.Long">
+		delete from LOT_MATCH_STATS
+		where OK_MATCH_ID = #okMatchId#
+	</delete>
+	
+    <select id="queryOkUrlDateFromMatchStats" resultMap="OkUrlDateResult">
+        select distinct OK_URL_DATE FROM LOT_MATCH_STATS ORDER BY OK_URL_DATE desc
+    </select>
+    
+    <select id="queryMatchStatsById" parameterClass="java.lang.Long" resultMap="MatchStatsResult">
+        select * from LOT_MATCH_STATS WHERE OK_MATCH_ID=#okMatchId#
+    </select>
+</sqlMap>

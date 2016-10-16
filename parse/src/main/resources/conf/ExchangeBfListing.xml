@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="BfListing">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="BfListing" type="com.wy.okooo.domain.ExchangeBfListing" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="BfListingResult" class="BfListing">
+		<result property="id" column="ID" />
+		<result property="hostBuyersPrice" column="HOST_BUYERS_PRICE" />
+		<result property="hostBuyersQuantity" column="HOST_BUYERS_QUANTITY" />
+		<result property="evenBuyersPrice" column="EVEN_BUYERS_PRICE" />
+		<result property="evenBuyersQuantity" column="EVEN_BUYERS_QUANTITY" />
+        <result property="visitingBuyersPrice" column="VISITING_BUYERS_PRICE" />
+        <result property="visitingBuyersQuantity" column="VISITING_BUYERS_QUANTITY" />
+        <result property="hostSellersPrice" column="HOST_SELLERS_PRICE" />
+        <result property="hostSellersQuantity" column="HOST_SELLERS_QUANTITY" />
+        <result property="evenSellersPrice" column="EVEN_SELLERS_PRICE" />
+        <result property="evenSellersQuantity" column="EVEN_SELLERS_QUANTITY" />
+        <result property="visitingSellersPrice" column="VISITING_SELLERS_PRICE" />
+        <result property="visitingSellersQuantity" column="VISITING_SELLERS_QUANTITY" />
+        <result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertBfListing" parameterClass="BfListing">
+		insert into
+		LOT_BF_LISTING (
+		ID,
+		HOST_BUYERS_PRICE,
+		HOST_BUYERS_QUANTITY,
+		EVEN_BUYERS_PRICE,
+		EVEN_BUYERS_QUANTITY,
+		VISITING_BUYERS_PRICE,
+		VISITING_BUYERS_QUANTITY,
+		HOST_SELLERS_PRICE,
+		HOST_SELLERS_QUANTITY,
+		EVEN_SELLERS_PRICE,
+		EVEN_SELLERS_QUANTITY,
+		VISITING_SELLERS_PRICE,
+		VISITING_SELLERS_QUANTITY,
+		TIMESTAMP)
+		values (
+		#id#, #hostBuyersPrice#,
+		#hostBuyersQuantity#,#evenBuyersPrice#,#evenBuyersQuantity#,#visitingBuyersPrice#,#visitingBuyersQuantity#,
+		#hostSellersPrice#,#hostSellersQuantity#,#evenSellersPrice#,#evenSellersQuantity#,#visitingSellersPrice#,#visitingSellersQuantity#, #timestamp#
+		)
+	</insert>
+	<delete id="deleteBfListing" parameterClass="java.lang.Long">
+		delete from LOT_BF_LISTING where id = #id#
+	</delete>
+
+</sqlMap>

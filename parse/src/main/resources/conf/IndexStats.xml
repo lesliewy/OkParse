@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="IndexStats">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="IndexStats" type="com.wy.okooo.domain.IndexStats" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="IndexStatsResult" class="IndexStats">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="matchSeq" column="MATCH_SEQ" />
+		<result property="jobType" column="JOB_TYPE" />
+		<result property="initOkoooHost" column="INIT_OKOOO_HOST" />
+		<result property="initOkoooEven" column="INIT_OKOOO_EVEN" />
+		<result property="initOkoooVisiting" column="INIT_OKOOO_VISITING" />
+		<result property="okoooHost" column="OKOOO_HOST" />
+		<result property="okoooEven" column="OKOOO_EVEN" />
+		<result property="okoooVisiting" column="OKOOO_VISITING" />
+		<result property="initStdDevHost" column="INIT_STD_DEV_HOST" />
+		<result property="initStdDevEven" column="INIT_STD_DEV_EVEN" />
+		<result property="initStdDevVisiting" column="INIT_STD_DEV_VISITING" />
+		<result property="stdDevHost" column="STD_DEV_HOST" />
+		<result property="stdDevEven" column="STD_DEV_EVEN" />
+		<result property="stdDevVisiting" column="STD_DEV_VISITING" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+	
+    <resultMap id="IndexStatsResult1" class="IndexStats">
+        <result property="okUrlDate" column="OK_URL_DATE" />
+        <result property="matchSeq" column="MATCH_SEQ" />
+        <result property="jobType" column="JOB_TYPE" />
+    </resultMap>
+	
+	<insert id="insertIndexStats" parameterClass="IndexStats">
+		insert into LOT_INDEX_STATS (
+		OK_URL_DATE,
+		MATCH_SEQ,
+		JOB_TYPE,
+		INIT_OKOOO_HOST,
+		INIT_OKOOO_EVEN,
+		INIT_OKOOO_VISITING,
+		OKOOO_HOST,
+		OKOOO_EVEN,
+		OKOOO_VISITING,
+		INIT_STD_DEV_HOST,
+		INIT_STD_DEV_EVEN,
+		INIT_STD_DEV_VISITING,
+		STD_DEV_HOST,
+		STD_DEV_EVEN,
+		STD_DEV_VISITING,
+		TIMESTAMP)
+		values (
+		#okUrlDate#, #matchSeq#, #jobType#,#initOkoooHost#,#initOkoooEven#,#initOkoooVisiting#,#okoooHost#,#okoooEven#,
+		#okoooVisiting#, #initStdDevHost#, #initStdDevEven#, #initStdDevVisiting#, #stdDevHost#, #stdDevEven#, #stdDevVisiting#,
+		#timestamp#
+		)
+	</insert>
+	
+	<select id="queryAllByOkUrlDate" parameterClass="java.lang.String"
+        resultMap="IndexStatsResult">
+        select *
+        from LOT_INDEX_STATS
+        where OK_URL_DATE = #okUrlDate#
+    </select>
+    
+    <select id="queryIndexStatsByRange" parameterClass="IndexStats"
+        resultMap="IndexStatsResult">
+        select *
+        from LOT_INDEX_STATS
+        where OK_URL_DATE = #okUrlDate# and MATCH_SEQ &gt;= #beginMatchSeq# and MATCH_SEQ &lt;= #endMatchSeq#
+    </select>
+    
+    <select id="queryCurrJobTypeIndex" parameterClass="java.lang.String"
+        resultMap="IndexStatsResult1">
+        select OK_URL_DATE, MATCH_SEQ, MAX(JOB_TYPE) JOB_TYPE
+          FROM LOT_INDEX_STATS 
+         WHERE OK_URL_DATE=#okUrlDate# AND JOB_TYPE LIKE 'C%' GROUP BY OK_URL_DATE, MATCH_SEQ
+    </select>
+</sqlMap>

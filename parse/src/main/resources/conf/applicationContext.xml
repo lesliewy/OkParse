@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<!-- Configurer that replaces ${...} placeholders with values from properties 
+		files -->
+	<!-- (in this case, mail and JDBC related properties) -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:conf/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- DAO begin -->
+	<bean id="matchDao" class="com.wy.okooo.dao.impl.MatchDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="euroOddsDao" class="com.wy.okooo.dao.impl.EuroOddsDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="asiaOddsDao" class="com.wy.okooo.dao.impl.AsiaOddsDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="euroOddsChangeDao" class="com.wy.okooo.dao.impl.EuroOddsChangeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="asiaOddsChangeDao" class="com.wy.okooo.dao.impl.AsiaOddsChangeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+    <bean id="allAverageDao" class="com.wy.okooo.dao.impl.ExchangeAllAverageDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="bfListingDao" class="com.wy.okooo.dao.impl.ExchangeBfListingDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="turnoverDetailDao" class="com.wy.okooo.dao.impl.ExchangeBfTurnoverDetailDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="transactionPropDao" class="com.wy.okooo.dao.impl.ExchangeTransactionPropDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="weightRuleDao" class="com.wy.okooo.dao.impl.WeightRuleDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="kellyRuleDao" class="com.wy.okooo.dao.impl.KellyRuleDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="corpDao" class="com.wy.okooo.dao.impl.CorpDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="kellyCorpResultDao" class="com.wy.okooo.dao.impl.KellyCorpResultDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="kellyCorpCountDao" class="com.wy.okooo.dao.impl.KellyCorpCountDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="matchJobDao" class="com.wy.okooo.dao.impl.MatchJobDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="kellyMatchCountDao" class="com.wy.okooo.dao.impl.KellyMatchCountDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="leaguePointsDao" class="com.wy.okooo.dao.impl.LeaguePointsDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="matchStatsDao" class="com.wy.okooo.dao.impl.MatchStatsDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="scoreOddsDao" class="com.wy.okooo.dao.impl.ScoreOddsDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="configDao" class="com.wy.okooo.dao.impl.ConfigDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="matchSkipDao" class="com.wy.okooo.dao.impl.MatchSkipDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="euroOddsChangeAllDao" class="com.wy.okooo.dao.impl.EuroOddsChangeAllDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="asiaOddsTrendsDao" class="com.wy.okooo.dao.impl.AsiaOddsTrendsDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="indexStatsDao" class="com.wy.okooo.dao.impl.IndexStatsDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="euroOddsHandicapDao" class="com.wy.okooo.dao.impl.EuroOddsHandicapDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="euroTransAsiaDao" class="com.wy.okooo.dao.impl.EuroTransAsiaDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="euroAsiaReferDao" class="com.wy.okooo.dao.impl.EuroAsiaReferDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="probAverageDao" class="com.wy.okooo.dao.impl.ProbAverageDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+    <bean id="euroChangeDailyStatsDao" class="com.wy.okooo.dao.impl.EuroChangeDailyStatsDaoImpl">
+        <property name="sqlMapClient" ref="sqlMapClient" />
+    </bean>
+	<!-- DAO end -->
+
+	<!-- Service begin -->
+	<bean id="allSingleMatchService" class="com.wy.okooo.service.impl.AllSingleMatchServiceImpl">
+		<property name="singleMatchService" ref="singleMatchService" />
+		<property name="euroOddsService" ref="euroOddsService" />
+		<property name="asiaOddsService" ref="asiaOddsService" />
+		<property name="euroOddsChangeService" ref="euroOddsChangeService" />
+		<property name="asiaOddsChangeService" ref="asiaOddsChangeService" />
+		<property name="exchangeService" ref="exchangeService" />
+	</bean>
+    <bean id="singleMatchService" class="com.wy.okooo.service.impl.SingleMatchServiceImpl">
+        <property name="matchDao" ref="matchDao" />
+    </bean>
+	<bean id="euroOddsService" class="com.wy.okooo.service.impl.EuroOddsServiceImpl">
+		<property name="euroOddsDao" ref="euroOddsDao" />
+	</bean>
+	<bean id="asiaOddsService" class="com.wy.okooo.service.impl.AsiaOddsServiceImpl">
+		<property name="asiaOddsDao" ref="asiaOddsDao" />
+	</bean>
+	<bean id="euroOddsChangeService" class="com.wy.okooo.service.impl.EuroOddsChangeServiceImpl">
+		<property name="euroOddsChangeDao" ref="euroOddsChangeDao" />
+		<property name="euroOddsChangeAllDao" ref="euroOddsChangeAllDao" />
+	</bean>
+	<bean id="asiaOddsChangeService" class="com.wy.okooo.service.impl.AsiaOddsChangeServiceImpl">
+		<property name="asiaOddsChangeDao" ref="asiaOddsChangeDao" />
+	</bean>
+	<bean id="exchangeService" class="com.wy.okooo.service.impl.ExchangeServiceImpl">
+        <property name="allAverageDao" ref="allAverageDao" />
+        <property name="bfListingDao" ref="bfListingDao" />
+        <property name="turnoverDetailDao" ref="turnoverDetailDao" />
+        <property name="transactionPropDao" ref="transactionPropDao" />
+    </bean>
+    <bean id="matchComp" class="com.wy.okooo.compensate.MatchComp">
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="euroOddsService" ref="euroOddsService" />
+        <property name="asiaOddsService" ref="asiaOddsService" />
+        <property name="euroOddsChangeService" ref="euroOddsChangeService" />
+        <property name="asiaOddsChangeService" ref="asiaOddsChangeService" />
+        <property name="exchangeService" ref="exchangeService" />
+    </bean>
+    <bean id="weightRuleService" class="com.wy.okooo.service.impl.WeightRuleServiceImpl">
+        <property name="weightRuleDao" ref="weightRuleDao" />
+    </bean>
+    <bean id="kellyRuleService" class="com.wy.okooo.service.impl.KellyRuleServiceImpl">
+        <property name="kellyRuleDao" ref="kellyRuleDao" />
+    </bean>
+    <bean id="corpService" class="com.wy.okooo.service.impl.CorpServiceImpl">
+        <property name="corpDao" ref="corpDao" />
+    </bean>
+    <bean id="analyseService" class="com.wy.okooo.service.impl.AnalyseServiceImpl">
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="euroOddsChangeService" ref="euroOddsChangeService" />
+        <property name="weightRuleService" ref="weightRuleService" />
+        <property name="kellyRuleService" ref="kellyRuleService" />
+        <property name="exchangeService" ref="exchangeService" />
+        <property name="euroOddsService" ref="euroOddsService" />
+        <property name="kellyCorpResultService" ref="kellyCorpResultService" />
+        <property name="asiaOddsTrendsService" ref="asiaOddsTrendsService" />
+        <property name="indexStatsService" ref="indexStatsService" />
+        <property name="euroOddsHandicapService" ref="euroOddsHandicapService" />
+        <property name="kellyMatchCountService" ref="kellyMatchCountService" />
+        <property name="euroTransAsiaService" ref="euroTransAsiaService" />
+        <property name="asiaOddsService" ref="asiaOddsService" />
+        <property name="euroAsiaReferService" ref="euroAsiaReferService" />
+        <property name="okJobService" ref="okJobService" />
+    </bean>
+    <bean id="kellyCorpResultService" class="com.wy.okooo.service.impl.KellyCorpResultServiceImpl">
+        <property name="kellyCorpResultDao" ref="kellyCorpResultDao" />
+    </bean>
+    <bean id="kellyCorpCountService" class="com.wy.okooo.service.impl.KellyCorpCountServiceImpl">
+        <property name="kellyCorpCountDao" ref="kellyCorpCountDao" />
+    </bean>
+    <bean id="analyseUtilService" class="com.wy.okooo.service.impl.AnalyseUtilServiceImpl">
+        <property name="kellyCorpResultService" ref="kellyCorpResultService" />
+        <property name="corpService" ref="corpService" />
+        <property name="euroOddsService" ref="euroOddsService" />
+        <property name="euroOddsChangeService" ref="euroOddsChangeService" />
+        <property name="asiaOddsChangeService" ref="asiaOddsChangeService" />
+        <property name="kellyCorpCountService" ref="kellyCorpCountService" />
+        <property name="kellyMatchCountService" ref="kellyMatchCountService" />
+        <property name="exchangeService" ref="exchangeService" />
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="analyseService" ref="analyseService" />
+        <property name="leaguePointsService" ref="leaguePointsService" />
+        <property name="matchStatsService" ref="matchStatsService" />
+        <property name="scoreOddsService" ref="scoreOddsService" />
+        <property name="asiaOddsTrendsService" ref="asiaOddsTrendsService" />
+        <property name="indexStatsService" ref="indexStatsService" />
+        <property name="euroOddsHandicapService" ref="euroOddsHandicapService" />
+        <property name="euroTransAsiaService" ref="euroTransAsiaService" />
+        <property name="okJobService" ref="okJobService" />
+        <property name="probAverageService" ref="probAverageService" />
+    </bean>
+    <bean id="analyseCorpUtilService" class="com.wy.okooo.service.impl.AnalyseCorpUtilServiceImpl">
+        <property name="euroOddsChangeService" ref="euroOddsChangeService" />
+    </bean>
+    <bean id="matchJobService" class="com.wy.okooo.service.impl.MatchJobServiceImpl">
+        <property name="matchJobDao" ref="matchJobDao" />
+    </bean>
+    <bean id="kellyMatchCountService" class="com.wy.okooo.service.impl.KellyMatchCountServiceImpl">
+        <property name="kellyMatchCountDao" ref="kellyMatchCountDao" />
+    </bean>
+    <bean id="leaguePointsService" class="com.wy.okooo.service.impl.LeaguePointsServiceImpl">
+        <property name="leaguePointsDao" ref="leaguePointsDao" />
+    </bean>
+    <bean id="matchStatsService" class="com.wy.okooo.service.impl.MatchStatsServiceImpl">
+        <property name="matchStatsDao" ref="matchStatsDao" />
+    </bean>
+    <bean id="analyseTeamService" class="com.wy.okooo.service.impl.AnalyseTeamServiceImpl">
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="leaguePointsService" ref="leaguePointsService" />
+        <property name="matchStatsService" ref="matchStatsService" />
+    </bean>
+    <bean id="scoreOddsService" class="com.wy.okooo.service.impl.ScoreOddsServiceImpl">
+        <property name="scoreOddsDao" ref="scoreOddsDao"/>
+    </bean>
+    <bean id="configService" class="com.wy.okooo.service.impl.ConfigServiceImpl">
+        <property name="configDao" ref="configDao"/>
+    </bean>
+    <bean id="matchSkipService" class="com.wy.okooo.service.impl.MatchSkipServiceImpl">
+        <property name="matchSkipDao" ref="matchSkipDao"/>
+    </bean>
+    <bean id="asiaOddsTrendsService" class="com.wy.okooo.service.impl.AsiaOddsTrendsServiceImpl">
+        <property name="asiaOddsTrendsDao" ref="asiaOddsTrendsDao"/>
+    </bean>
+    <bean id="indexStatsService" class="com.wy.okooo.service.impl.IndexStatsServiceImpl">
+        <property name="indexStatsDao" ref="indexStatsDao"/>
+    </bean>
+    <bean id="okJobService" class="com.wy.okooo.service.impl.OkJobServiceImpl">
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="euroAsiaReferService" ref="euroAsiaReferService" />
+        <property name="corpService" ref="corpService" />
+        <property name="euroChangeDailyStatsService" ref="euroChangeDailyStatsService" />
+        <property name="configService" ref="configService" />
+    </bean>
+    <bean id="euroOddsHandicapService" class="com.wy.okooo.service.impl.EuroOddsHandicapServiceImpl">
+        <property name="euroOddsHandicapDao" ref="euroOddsHandicapDao"/>
+    </bean>
+    <bean id="euroTransAsiaService" class="com.wy.okooo.service.impl.EuroTransAsiaServiceImpl">
+        <property name="euroTransAsiaDao" ref="euroTransAsiaDao" />
+    </bean>
+    <bean id="euroAsiaReferService" class="com.wy.okooo.service.impl.EuroAsiaReferServiceImpl">
+        <property name="euroAsiaReferDao" ref="euroAsiaReferDao" />
+    </bean>
+    <bean id="analyseForTestService" class="com.wy.okooo.service.impl.AnalyseForTestServiceImpl">
+        <property name="euroOddsService" ref="euroOddsService" />
+        <property name="euroOddsChangeService" ref="euroOddsChangeService" />
+    </bean>
+    <bean id="probAverageService" class="com.wy.okooo.service.impl.ProbAverageServiceImpl">
+        <property name="probAverageDao" ref="probAverageDao" />
+    </bean>
+    <bean id="euroChangeDailyStatsService" class="com.wy.okooo.service.impl.EuroChangeDailyStatsServiceImpl">
+        <property name="euroChangeDailyStatsDao" ref="euroChangeDailyStatsDao" />
+    </bean>
+	<!-- Service end -->
+	
+	<!-- job service begin -->
+    <bean id="parseAndMailService" class="com.wy.okooo.job.ParseAndMailJob">
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="analyseService" ref="analyseService" />
+        <property name="analyseUtilService" ref="analyseUtilService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="configService" ref="configService" />
+        <property name="kellyMatchCountService" ref="kellyMatchCountService" />
+        <property name="matchSkipService" ref="matchSkipService" />
+    </bean>
+	<bean id="leaguePointsJob" class="com.wy.okooo.job.LeaguePointsJob">
+        <property name="leaguePointsService" ref="leaguePointsService" />
+    </bean>
+    <bean id="matchStatsJob" class="com.wy.okooo.job.MatchStatsJob">
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="matchStatsService" ref="matchStatsService" />
+        <property name="matchJobService" ref="matchJobService" />
+    </bean>
+    <bean id="matchAndTransPropJob" class="com.wy.okooo.job.MatchAndTransPropJob">
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="allSingleMatchService" ref="allSingleMatchService" />
+        <property name="matchJobService" ref="matchJobService" />
+    </bean>
+    <bean id="kellyCorpResultJob" class="com.wy.okooo.job.KellyCorpResultJob">
+        <property name="analyseService" ref="analyseService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="kellyCorpResultService" ref="kellyCorpResultService" />
+    </bean>
+    <bean id="scoreOddsJob" class="com.wy.okooo.job.ScoreOddsJob">
+        <property name="scoreOddsService" ref="scoreOddsService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="singleMatchService" ref="singleMatchService" />
+    </bean>
+    <bean id="asiaOddsKellyJob" class="com.wy.okooo.job.AsiaOddsKellyJob">
+        <property name="configService" ref="configService" />
+        <property name="singleMatchService" ref="singleMatchService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="kellyMatchCountService" ref="kellyMatchCountService" />
+        <property name="analyseService" ref="analyseService" />
+        <property name="asiaOddsTrendsService" ref="asiaOddsTrendsService" />
+    </bean>
+    <bean id="indexStatsJob" class="com.wy.okooo.job.IndexStatsJob">
+        <property name="configService" ref="configService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="indexStatsService" ref="indexStatsService" />
+        <property name="analyseService" ref="analyseService" />
+        <property name="okJobService" ref="okJobService" />
+        <property name="matchSkipService" ref="matchSkipService" />
+    </bean>
+    <bean id="euroOddsHandicapJob" class="com.wy.okooo.job.EuroOddsHandicapJob">
+        <property name="configService" ref="configService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="analyseService" ref="analyseService" />
+        <property name="okJobService" ref="okJobService" />
+        <property name="kellyMatchCountService" ref="kellyMatchCountService" />
+        <property name="euroOddsHandicapService" ref="euroOddsHandicapService" />
+    </bean>
+    <bean id="probAverageJob" class="com.wy.okooo.job.ProbAverageJob">
+        <property name="configService" ref="configService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="probAverageService" ref="probAverageService" />
+        <property name="euroOddsChangeService" ref="euroOddsChangeService" />
+        <property name="okJobService" ref="okJobService" />
+    </bean>
+    <bean id="euroChangeDailyStatsJob" class="com.wy.okooo.job.EuroChangeDailyStatsJob">
+        <property name="configService" ref="configService" />
+        <property name="euroOddsService" ref="euroOddsService" />
+        <property name="euroChangeDailyStatsService" ref="euroChangeDailyStatsService" />
+        <property name="euroOddsChangeService" ref="euroOddsChangeService" />
+    </bean>
+    <bean id="asiaChangeDailyJob" class="com.wy.okooo.job.AsiaChangeDailyJob">
+        <property name="configService" ref="configService" />
+        <property name="matchJobService" ref="matchJobService" />
+        <property name="asiaOddsService" ref="asiaOddsService" />
+        <property name="asiaOddsChangeService" ref="asiaOddsChangeService" />
+        <property name="okJobService" ref="okJobService" />
+        <property name="matchSkipService" ref="matchSkipService" />
+    </bean>
+	<!-- job service end -->
+
+	<!-- datasource begin -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- datasource end -->
+
+	<!-- SqlMap setup for iBATIS Database Layer -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<!-- name 为configLocation或s 不可为其他 -->
+		<property name="configLocation" value="classpath:conf/SqlMapConfig.xml" />
+		<!-- dataSource不是必需 -->
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- <aop:config> <aop:advisor pointcut="execution(* *..ProductManager.*(..))" 
+		advice-ref="txAdvice" /> </aop:config> <tx:advice id="txAdvice"> <tx:attributes> 
+		<tx:method name="save*" /> <tx:method name="*" read-only="true" /> </tx:attributes> 
+		</tx:advice> -->
+		
+	<!-- JOB 配置 Begin -->
+	<!-- 只要该配置文件被实例化就会执行，不一定要放在容器里.  例如:  new ClassPathXmlApplicationContext(
+                "conf/applicationContext.xml")-->
+    <!-- JOB A - 发送邮件 -->
+	<bean id="parseAndMailJobDetail"  
+	    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+	    <!-- 指定任务类 -->  
+	    <property name="targetObject" ref="parseAndMailService" />  
+	    <!-- 指定任务执行的方法 execute processMatch-->  
+	    <property name="targetMethod" value="processMatch" />  
+	</bean>
+	<!-- 1 秒 是 0-59  , - * / 
+         2 分 是 0-59  , - * / 
+         3 小时 是 0-23 , - * / 
+         4 日 是 1-31 , - * ? / L W 
+         5 月 是 1-12 or JAN-DEC , - * / 
+         6 周 是 1-7 or SUN-SAT , - * ? / L #  
+         7 年 否 empty 或 1970-2099 , - * /   
+    -->
+	<bean id="parseAndMailJobTrigger"  
+	    class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+	    <property name="jobDetail" ref="parseAndMailJobDetail" />  
+	    <property name="cronExpression" value="0 0/3 * * * ?" />  
+	</bean>
+	
+	<!-- 获取联赛积分JOB. -->
+	<bean id="leaguePointsJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="leaguePointsJob" />  
+        <property name="targetMethod" value="processLeaguePoints" />  
+    </bean>  
+    <bean id="leaguePointsJobTrigger"  
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="leaguePointsJobDetail" />  
+        <property name="cronExpression" value="0 1 21 * * ?" /> 
+    </bean>
+    
+    <!-- 获取技术统计JOB -->
+    <bean id="matchStatsJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="matchStatsJob" />  
+        <property name="targetMethod" value="processMatchStats" />  
+    </bean>
+    <bean id="matchStatsJobTrigger"  
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="matchStatsJobDetail" />  
+        <property name="cronExpression" value="0 1 22 * * ?" /> 
+    </bean>
+    
+    <!-- MATCH, 交易比例JOB -->
+    <bean id="matchAndTransPropJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="matchAndTransPropJob" />  
+        <property name="targetMethod" value="processMatchAndTransProp" />  
+    </bean>  
+    <bean id="matchAndTransPropJobTrigger"  
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="matchAndTransPropJobDetail" />
+        <property name="cronExpression" value="0 1 20 * * ?" /> 
+    </bean>
+    
+    <!-- KellyCorpResult JOB  暂时未执行. -->
+    <bean id="kellyCorpResultJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="kellyCorpResultJob" />  
+        <property name="targetMethod" value="processKellyCorpResult" />  
+    </bean>  
+    <bean id="kellyCorpResultJobTrigger"  
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="kellyCorpResultJobDetail" />
+        <property name="cronExpression" value="0 1 1 * * ?" />
+    </bean>
+    
+    <bean id="scoreOddsJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="scoreOddsJob" />  
+        <property name="targetMethod" value="processScoreOdds" />  
+    </bean>  
+    <bean id="scoreOddsJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="scoreOddsJobDetail" />
+        <property name="cronExpression" value="0 1 0/2 * * ?" />
+    </bean>
+    
+    <!-- JOB B = 分析亚盘kelly的变化情况. 去掉KI/Ki-->
+    <bean id="asiaOddsKellyJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="asiaOddsKellyJob" />  
+        <property name="targetMethod" value="processAsiaKelly" />  
+    </bean>  
+    <bean id="asiaOddsKellyJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="asiaOddsKellyJobDetail" />
+        <property name="cronExpression" value="0 0/11 * * * ?" />
+    </bean>
+    
+    <!-- JOB C - 分析okooo指数的变化情况. -->
+    <bean id="indexStatsJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="indexStatsJob" />  
+        <property name="targetMethod" value="processIndexStats" />  
+    </bean>  
+    <bean id="indexStatsJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="indexStatsJobDetail" />
+        <property name="cronExpression" value="0 0/4 * * * ?" />
+    </bean>
+    
+    <!-- JOB D - 分析让球的变化情况. -->
+    <bean id="euroOddsHandicapJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="euroOddsHandicapJob" />  
+        <property name="targetMethod" value="processEuroOddsHandicap" />  
+    </bean>  
+    <bean id="euroOddsHandicapJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="euroOddsHandicapJobDetail" />
+        <property name="cronExpression" value="0 0/6 * * * ?" />
+    </bean>
+    
+    <!-- JOB E - 市场平均概率的变化情况. -->
+    <bean id="probAverageJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="probAverageJob" />  
+        <property name="targetMethod" value="processProbAverage" />  
+    </bean>  
+    <bean id="probAverageJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="probAverageJobDetail" />
+        <property name="cronExpression" value="0 0/16 * * * ?" />
+    </bean>
+    
+    <!-- 分析 LOT_EURO_CHANGE_DAILY_STATS JOB -->
+    <bean id="euroChangeDailyStatsJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="euroChangeDailyStatsJob" />  
+        <property name="targetMethod" value="processAnalyseEuroChangeDaily" />  
+    </bean>  
+    <bean id="euroChangeDailyStatsJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="euroChangeDailyStatsJobDetail" />
+        <property name="cronExpression" value="0 30 7 * * ?" />
+    </bean>
+    
+    <!-- JOB F: 定时获取所有公司的亚盘页面， 获取每个公司最初的、盘口变化后的、最新的赔率数据 -->
+    <bean id="asiaChangeDailyJobDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 指定任务类 -->
+        <property name="targetObject" ref="asiaChangeDailyJob" />  
+        <property name="targetMethod" value="processAsiaChangeDaily" />  
+    </bean>  
+    <bean id="asiaChangeDailyJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="asiaChangeDailyJobDetail" />
+        <property name="cronExpression" value="0 0/8 * * * ?" />
+    </bean>
+    
+    <bean lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+        <property name="triggers">
+            <list>
+                <ref bean="parseAndMailJobTrigger" />
+                <ref bean="leaguePointsJobTrigger" />
+                <ref bean="matchStatsJobTrigger" />
+                <ref bean="matchAndTransPropJobTrigger" />
+                <ref bean="scoreOddsJobTrigger" />
+                <ref bean="indexStatsJobTrigger" />
+                <ref bean="asiaOddsKellyJobTrigger" />
+                <ref bean="euroOddsHandicapJobTrigger" />
+                <ref bean="probAverageJobTrigger" />
+                <ref bean="euroChangeDailyStatsJobTrigger" />
+                <ref bean="asiaChangeDailyJobTrigger" />
+            </list>
+        </property>
+    </bean>
+    <!-- JOB 配置 END -->
+</beans>

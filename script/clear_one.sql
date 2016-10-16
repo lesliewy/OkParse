@@ -1,0 +1,14 @@
+delete  from LOT_BF_LISTING where ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+delete  from LOT_ALL_AVERAGE where ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+commit;
+delete  from LOT_TRANS_PROP where ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+delete  from LOT_BF_TURNOVER_DETAIL where ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+commit;
+delete  from LOT_ODDS_EURO where OK_MATCH_ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+delete  from LOT_ODDS_ASIA where OK_MATCH_ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+commit;
+delete  from LOT_ODDS_EURO_CHANGE where OK_MATCH_ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+delete  from LOT_ODDS_ASIA_CHANGE where OK_MATCH_ID IN(SELECT OK_MATCH_ID FROM LOT_MATCH where OK_URL_DATE like '1409%');
+commit;
+delete  from LOT_MATCH where OK_URL_DATE like '1409%';
+commit;

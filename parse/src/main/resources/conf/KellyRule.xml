@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KellyRule">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="KellyRule" type="com.wy.okooo.domain.KellyRule" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="KellyRuleResult" class="KellyRule">
+		<result property="rowNames" column="ROW_NAMES" />
+		<result property="corpNo" column="CORP_NO" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="matchName" column="MATCH_NAME" />
+		<result property="count" column="COUNT" />
+		<result property="winCount" column="WIN_COUNT" />
+		<result property="evenCount" column="EVEN_COUNT" />
+		<result property="negaCount" column="NEGA_COUNT" />
+		<result property="winProb" column="WIN_PROB" />
+		<result property="evenProb" column="EVEN_PROB" />
+		<result property="negaProb" column="NEGA_PROB" />
+		<result property="ruleType" column="RULE_TYPE" />
+		<result property="timestamp" column="TIMESTAMP" />
+		<result property="timeFlag" column="TIME_FLAG" />
+	</resultMap>
+
+	<select id="queryKellyRulesByMatchName" resultMap="KellyRuleResult">
+	    <!-- 
+		select a.ROW_NAMES, a.ID, a.ODDS_CORP_NAME, a.MATCH_NAME, a.COUNT, a.WIN_COUNT,
+		a.EVEN_COUNT, a.NEGA_COUNT,
+		a.WIN_PROB, a.EVEN_PROB, a.NEGA_PROB, a.RULE_TYPE, a.TIMESTAMP, a.TIME_FLAG, b.CORP_NO
+		from LOT_KELLY_RULE a, LOT_CORP b
+		where a.ODDS_CORP_NAME = b.CORP_NAME
+		      AND a.RULE_TYPE='K2'
+		      AND a.COUNT > 5
+		      AND a.WIN_PROB >= 0.7
+		      AND a.TIME_FLAG = '1409'
+		      AND a.MATCH_NAME=#matchName#
+		order by a.WIN_PROB desc
+		-->
+		select a.ROW_NAMES, a.ID, a.ODDS_CORP_NAME, a.MATCH_NAME, a.COUNT, a.WIN_COUNT,
+        a.EVEN_COUNT, a.NEGA_COUNT,
+        a.WIN_PROB, a.EVEN_PROB, a.NEGA_PROB, a.RULE_TYPE, a.TIMESTAMP, a.TIME_FLAG, b.CORP_NO
+        from LOT_KELLY_RULE a, LOT_CORP b
+        where a.ODDS_CORP_NAME = b.CORP_NAME
+              AND a.RULE_TYPE='K2'
+              AND a.TIME_FLAG = '1409'
+              AND a.MATCH_NAME=#matchName#
+        order by a.WIN_PROB desc
+	</select>
+</sqlMap>

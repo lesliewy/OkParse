@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EuropeOddsChange">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="EuropeOddsChange" type="com.wy.okooo.domain.EuropeOddsChange" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="EuropeOddsChangeResult" class="EuropeOddsChange">
+		<result property="id" column="ID" />
+		<result property="okMatchId" column="OK_MATCH_ID" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="oddsSeq" column="ODDS_SEQ" />
+		<result property="oddsTime" column="ODDS_TIME" />
+		<result property="timeBeforeMatch" column="TIME_BEFORE_MATCH" />
+		<result property="hostOdds" column="HOST_ODDS" />
+		<result property="evenOdds" column="EVEN_ODDS" />
+		<result property="visitingOdds" column="VISITING_ODDS" />
+		<result property="hostProb" column="HOST_PROB" />
+		<result property="evenProb" column="EVEN_PROB" />
+		<result property="visitingProb" column="VISITING_PROB" />
+		<result property="hostKelly" column="HOST_KELLY" />
+		<result property="evenKelly" column="EVEN_KELLY" />
+		<result property="visitingKelly" column="VISITING_KELLY" />
+		<result property="timestamp" column="TIMESTAMP" />
+		<result property="changeNum" column="CHANGE_NUM" />
+	</resultMap>
+	
+    <resultMap id="EuropeOddsChangeNum" class="EuropeOddsChange">
+        <result property="okMatchId" column="OK_MATCH_ID" />
+        <result property="oddsCorpName" column="ODDS_CORP_NAME" />
+        <result property="changeNum" column="CHANGE_NUM" />
+        <result property="timeBeforeMatch" column="TIME_BEFORE_MATCH" />
+    </resultMap>
+
+	<insert id="insertEuroOddsChange" parameterClass="EuropeOddsChange">
+		insert into LOT_ODDS_EURO_CHANGE (
+		OK_MATCH_ID,
+		ODDS_CORP_NAME,
+		ODDS_SEQ,
+		ODDS_TIME,
+		TIME_BEFORE_MATCH,
+		HOST_ODDS,
+		EVEN_ODDS,
+		VISITING_ODDS,
+		HOST_PROB,
+		EVEN_PROB,
+		VISITING_PROB,
+		HOST_KELLY,
+		EVEN_KELLY,
+		VISITING_KELLY,
+		TIMESTAMP,
+		CHANGE_NUM)
+		values (
+		#okMatchId#, #oddsCorpName#, #oddsSeq#, #oddsTime#, #timeBeforeMatch#, #hostOdds#,
+		#evenOdds#,#visitingOdds#,#hostProb#,#evenProb#,#visitingProb#,#hostKelly#,#evenKelly#, #visitingKelly#, #timestamp#, #changeNum#
+		)
+	</insert>
+    <delete id="deleteEuroOddsChange" parameterClass="java.lang.Long">
+        delete from LOT_ODDS_EURO_CHANGE where id = #id#
+    </delete>
+    
+    <select id="queryEuroOddsChanByCorpName" parameterClass="EuropeOddsChange"
+        resultMap="EuropeOddsChangeResult">
+        select ID,OK_MATCH_ID, ODDS_CORP_NAME, ODDS_SEQ, ODDS_TIME, TIME_BEFORE_MATCH,
+        HOST_ODDS, EVEN_ODDS,VISITING_ODDS,HOST_PROB, EVEN_PROB,VISITING_PROB, HOST_KELLY,
+        EVEN_KELLY, VISITING_KELLY, TIMESTAMP, CHANGE_NUM
+        from LOT_ODDS_EURO_CHANGE
+        where OK_MATCH_ID = #okMatchId# AND ODDS_CORP_NAME = #oddsCorpName#
+    </select>
+
+    <update id="updateEuroOddsChangeNum" parameterClass="EuropeOddsChange">
+        update LOT_ODDS_EURO_CHANGE SET CHANGE_NUM=#changeNum# WHERE ODDS_CORP_NAME=#oddsCorpName# and OK_MATCH_ID=#okMatchId#
+    </update>
+    
+    <select id="queryChangeNumByCorp" parameterClass="java.lang.String"
+        resultMap="EuropeOddsChangeNum">
+        select ODDS_CORP_NAME, OK_MATCH_ID, COUNT(*) CHANGE_NUM
+          from LOT_ODDS_EURO_CHANGE
+         where ODDS_CORP_NAME = #oddsCorpName# group by OK_MATCH_ID
+    </select>
+    
+    <select id="queryChangeTimeBeforeByCorp" parameterClass="java.lang.String"
+        resultMap="EuropeOddsChangeNum">
+        select ODDS_CORP_NAME, OK_MATCH_ID, CHANGE_NUM, TIME_BEFORE_MATCH
+          from LOT_ODDS_EURO_CHANGE
+         where ODDS_CORP_NAME = #oddsCorpName# AND ODDS_SEQ=2;
+    </select>
+    
+</sqlMap>

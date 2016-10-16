@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="WeightRule">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="WeightRule" type="com.wy.okooo.domain.WeightRule" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="WeightRuleResult" class="WeightRule">
+		<result property="rowNames" column="ROW_NAMES" />
+		<result property="id" column="ID" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="matchName" column="MATCH_NAME" />
+		<result property="multiple" column="MULTIPLE" />
+		<result property="count" column="COUNT" />
+		<result property="winCount" column="WIN_COUNT" />
+		<result property="evenCount" column="EVEN_COUNT" />
+		<result property="negaCount" column="NEGA_COUNT" />
+		<result property="winProb" column="WIN_PROB" />
+		<result property="evenProb" column="EVEN_PROB" />
+		<result property="negaProb" column="NEGA_PROB" />
+		<result property="ruleType" column="RULE_TYPE" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<select id="queryWeightRulesByType" resultMap="WeightRuleResult">
+		select ROW_NAMES, ID, ODDS_CORP_NAME, MATCH_NAME, MULTIPLE, COUNT, WIN_COUNT,
+		EVEN_COUNT, NEGA_COUNT,
+		WIN_PROB, EVEN_PROB, NEGA_PROB, RULE_TYPE, TIMESTAMP
+		from LOT_WEIGHT_RULE
+		where RULE_TYPE=#ruleType#
+	</select>
+</sqlMap>

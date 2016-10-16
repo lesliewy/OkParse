@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ProbAverage">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="ProbAverage" type="com.wy.okooo.domain.ProbAverage" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="ProbAverageResult" class="ProbAverage">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="matchSeq" column="MATCH_SEQ" />
+		<result property="jobType" column="JOB_TYPE" />
+		<result property="hostProb" column="HOST_PROB" />
+		<result property="evenProb" column="EVEN_PROB" />
+		<result property="visitingProb" column="VISITING_PROB" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertProbAverage" parameterClass="ProbAverage">
+		insert into LOT_PROB_AVG (
+		OK_URL_DATE,
+		MATCH_SEQ,
+		JOB_TYPE,
+		HOST_PROB,
+		EVEN_PROB,
+		VISITING_PROB,
+		TIMESTAMP)
+		values (
+		#okUrlDate#, #matchSeq#, #jobType#, #hostProb#,#evenProb#,#visitingProb#,#timestamp#
+		)
+	</insert>
+	
+    <select id="queryProbAverageByOkUrlDate" parameterClass="java.lang.String" resultMap="ProbAverageResult">
+        select * from LOT_PROB_AVG WHERE OK_URL_DATE=#okUrlDate#
+    </select>
+    
+    <select id="queryProbAverageBySeqs" parameterClass="ProbAverage"
+        resultMap="ProbAverageResult">
+        select *
+        from LOT_PROB_AVG
+        where OK_URL_DATE = #okUrlDate#
+              AND MATCH_SEQ IN 
+              <iterate property="matchSeqsInSql" conjunction="," open="(" close=")">
+                #matchSeqsInSql[]#
+              </iterate>
+              ORDER BY MATCH_SEQ, JOB_TYPE
+    </select>
+</sqlMap>

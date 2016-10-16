@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EuropeOddsChangeDaily">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="EuropeOddsChangeDaily" type="com.wy.okooo.domain.EuropeOddsChange" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="EuropeOddsChangeDailyResult" class="EuropeOddsChangeDaily">
+	    <result property="okUrlDate" column="OK_URL_DATE" />
+	    <result property="matchSeq" column="MATCH_SEQ" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="oddsSeq" column="ODDS_SEQ" />
+		<result property="oddsTime" column="ODDS_TIME" />
+		<result property="timeBeforeMatch" column="TIME_BEFORE_MATCH" />
+		<result property="hostOdds" column="HOST_ODDS" />
+		<result property="evenOdds" column="EVEN_ODDS" />
+		<result property="visitingOdds" column="VISITING_ODDS" />
+		<result property="hostProb" column="HOST_PROB" />
+		<result property="evenProb" column="EVEN_PROB" />
+		<result property="visitingProb" column="VISITING_PROB" />
+		<result property="hostKelly" column="HOST_KELLY" />
+		<result property="evenKelly" column="EVEN_KELLY" />
+		<result property="visitingKelly" column="VISITING_KELLY" />
+		<result property="lossRatio" column="LOSS_RATIO" />
+		<result property="changeNum" column="CHANGE_NUM" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+	
+    <resultMap id="EuropeOddsChangeDailyResult1" class="EuropeOddsChangeDaily">
+        <result property="matchSeq" column="MATCH_SEQ" />
+        <result property="oddsCorpName" column="ODDS_CORP_NAME" />
+        <result property="oddsSeq" column="ODDS_SEQ" />
+        <result property="timeBeforeMatch" column="TIME_BEFORE_MATCH" />
+        <result property="hostOdds" column="HOST_ODDS" />
+        <result property="evenOdds" column="EVEN_ODDS" />
+        <result property="visitingOdds" column="VISITING_ODDS" />
+        <result property="hostKelly" column="HOST_KELLY" />
+        <result property="evenKelly" column="EVEN_KELLY" />
+        <result property="visitingKelly" column="VISITING_KELLY" />
+        <result property="lossRatio" column="LOSS_RATIO" />
+        <result property="hostGoals" column="HOST_GOALS" />
+        <result property="visitingGoals" column="VISITING_GOALS" />
+    </resultMap>
+	
+	<insert id="insertEuroOddsChangeDaily" parameterClass="EuropeOddsChangeDaily">
+		insert into LOT_ODDS_EURO_CHANGE_DAILY (
+		OK_URL_DATE,
+		MATCH_SEQ,
+		ODDS_CORP_NAME,
+		ODDS_SEQ,
+		ODDS_TIME,
+		TIME_BEFORE_MATCH,
+		HOST_ODDS,
+		EVEN_ODDS,
+		VISITING_ODDS,
+		HOST_PROB,
+		EVEN_PROB,
+		VISITING_PROB,
+		HOST_KELLY,
+		EVEN_KELLY,
+		VISITING_KELLY,
+		LOSS_RATIO,
+		CHANGE_NUM,
+		TIMESTAMP)
+		values (
+		#okUrlDate#, #matchSeq#, #oddsCorpName#, #oddsSeq#, #oddsTime#, #timeBeforeMatch#, #hostOdds#,
+		#evenOdds#,#visitingOdds#,#hostProb#,#evenProb#,#visitingProb#,#hostKelly#,#evenKelly#, #visitingKelly#, #lossRatio#, 
+		#changeNum#, #timestamp#
+		)
+	</insert>
+	
+    <delete id="deleteEuroOddsChanDailyByCorpName" parameterClass="EuropeOddsChangeDaily">
+        delete from LOT_ODDS_EURO_CHANGE_DAILY WHERE OK_URL_DATE=#okUrlDate# and MATCH_SEQ=#matchSeq# and ODDS_CORP_NAME = #oddsCorpName#
+    </delete>
+    
+    <delete id="deleteEuroOddsChanDailyByMatchSeq" parameterClass="EuropeOddsChangeDaily">
+        delete from LOT_ODDS_EURO_CHANGE_DAILY WHERE OK_URL_DATE=#okUrlDate# and MATCH_SEQ=#matchSeq#
+    </delete>
+    
+    <select id="queryEuroOddsChangeDailySb" parameterClass="EuropeOddsChangeDaily"
+        resultMap="EuropeOddsChangeDailyResult">
+        select *
+        from LOT_ODDS_EURO_CHANGE_DAILY
+        where OK_URL_DATE = #okUrlDate#
+              AND MATCH_SEQ IN 
+              <iterate property="matchSeqsInSql" conjunction="," open="(" close=")">
+                #matchSeqsInSql[]#
+              </iterate>
+              AND (ODDS_SEQ &lt;= #maxOddsSeq# OR ODDS_SEQ = CHANGE_NUM + 1)
+              ORDER BY MATCH_SEQ, ODDS_CORP_NAME, ODDS_SEQ
+    </select>
+    
+    <select id="queryDailyInitialWithResult" parameterClass="java.lang.String"
+        resultMap="EuropeOddsChangeDailyResult1">
+        select a.MATCH_SEQ, a.ODDS_CORP_NAME, a.ODDS_SEQ, a.TIME_BEFORE_MATCH, a.HOST_ODDS, a.EVEN_ODDS,
+               a.VISITING_ODDS, a.LOSS_RATIO, a.HOST_KELLY, a.EVEN_KELLY, a.VISITING_KELLY, b.HOST_GOALS,
+               b.VISITING_GOALS
+         from LOT_ODDS_EURO_CHANGE_DAILY a, LOT_MATCH b
+        WHERE a.OK_URL_DATE = b.OK_URL_DATE 
+              AND a.MATCH_SEQ = b.MATCH_SEQ 
+              AND a.ODDS_CORP_NAME=#oddsCorpName#
+              AND a.CHANGE_NUM = a.ODDS_SEQ - 1
+              AND a.CHANGE_NUM &lt;= 3
+             ORDER BY a.MATCH_SEQ, a.ODDS_SEQ
+    </select>
+</sqlMap>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EuropeChangeDailyStats">
+
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<typeAlias alias="EuropeChangeDailyStats" type="com.wy.okooo.domain.EuropeChangeDailyStats" />
+
+	<!-- Result maps describe the mapping between the columns returned from 
+		a query, and the class properties. A result map isn't necessary if the columns 
+		(or aliases) match to the properties exactly. -->
+	<resultMap id="EuropeChangeDailyStatsResult" class="EuropeChangeDailyStats">
+		<result property="okUrlDate" column="OK_URL_DATE" />
+		<result property="statsType" column="STATS_TYPE" />
+		<result property="oddsCorpName" column="ODDS_CORP_NAME" />
+		<result property="rank" column="RANK" />
+		<result property="totalMatches" column="TOTAL_MATCHES" />
+		<result property="hostMatches" column="HOST_MATCHES" />
+		<result property="evenMatches" column="EVEN_MATCHES" />
+		<result property="visitingMatches" column="VISITING_MATCHES" />
+		<result property="prob" column="PROB" />
+		<result property="timestamp" column="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertDailyStats" parameterClass="EuropeChangeDailyStats">
+		insert into LOT_EURO_CHANGE_DAILY_STATS (
+		OK_URL_DATE,
+		STATS_TYPE,
+		ODDS_CORP_NAME,
+		RANK,
+		TOTAL_MATCHES,
+		HOST_MATCHES,
+		EVEN_MATCHES,
+		VISITING_MATCHES,
+		PROB,
+		TIMESTAMP)
+		values (
+		#okUrlDate#, #statsType#, #oddsCorpName#,  #rank#,
+		#totalMatches#, #hostMatches#, #evenMatches#, #visitingMatches#, #prob#, #timestamp#
+		)
+	</insert>
+
+    <delete id="deleteDailyStatsByStatsType" parameterClass="EuropeChangeDailyStats">
+        delete from LOT_EURO_CHANGE_DAILY_STATS where OK_URL_DATE = #okUrlDate# AND STATS_TYPE = #statsType#
+    </delete>
+    
+    <select id="queryDailyStatsByStatsType" parameterClass="EuropeChangeDailyStats"
+        resultMap="EuropeChangeDailyStatsResult">
+        select *
+        from LOT_EURO_CHANGE_DAILY_STATS
+        where OK_URL_DATE = #okUrlDate#
+              AND STATS_TYPE = #statsType#
+    </select>
+
+    <select id="queryDailyStatsByStatsTypeProb" parameterClass="EuropeChangeDailyStats"
+        resultMap="EuropeChangeDailyStatsResult">
+        select *
+        from LOT_EURO_CHANGE_DAILY_STATS
+        where OK_URL_DATE = #okUrlDate#
+              AND STATS_TYPE = #statsType#
+              AND PROB &gt;= #prob#
+              ORDER BY RANK
+    </select>
+</sqlMap>
