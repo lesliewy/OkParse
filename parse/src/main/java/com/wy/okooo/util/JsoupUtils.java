@@ -288,6 +288,10 @@ public class JsoupUtils {
 //			nvps.add(new BasicNameValuePair("IDToken2", "password"));
 //			method.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 			
+			// 2017.09.09: 对于欧赔、亚盘的公司赔率详情,添加对应的referer, 否则无法下载.
+			if(url.matches(".*/soccer/match/[0-9]{6}/.*")){		
+				method.addHeader("Referer", url.replaceAll("change/[0-9]*/", ""));
+			}
 			RequestConfig requestConfig = RequestConfig.custom()
 					.setConnectionRequestTimeout(timeout)
 					.setConnectTimeout(timeout).setSocketTimeout(timeout)

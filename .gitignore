@@ -2,3 +2,5 @@ backup/
 charts/
 html/
 parse/target/
+parse/okparselog/
+parse-web/target/
