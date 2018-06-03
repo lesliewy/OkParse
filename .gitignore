@@ -4,3 +4,5 @@ html/
 parse/target/
 parse/okparselog/
 parse-web/target/
+parse/.idea/
+parse/*.iml
