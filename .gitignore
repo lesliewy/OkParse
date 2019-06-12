@@ -6,3 +6,4 @@ parse/okparselog/
 parse-web/target/
 parse/.idea/
 parse/*.iml
+.idea/
